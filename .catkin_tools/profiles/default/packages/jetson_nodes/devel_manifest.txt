@@ -1,5 +1,0 @@
-jetson_nodes
-/home/jimmy/URC_2022/devel_cb/.private/jetson_nodes/cmake.lock /home/jimmy/URC_2022/devel_cb/./cmake.lock
-/home/jimmy/URC_2022/devel_cb/.private/jetson_nodes/lib/pkgconfig/jetson_nodes.pc /home/jimmy/URC_2022/devel_cb/lib/pkgconfig/jetson_nodes.pc
-/home/jimmy/URC_2022/devel_cb/.private/jetson_nodes/share/jetson_nodes/cmake/jetson_nodesConfig-version.cmake /home/jimmy/URC_2022/devel_cb/share/jetson_nodes/cmake/jetson_nodesConfig-version.cmake
-/home/jimmy/URC_2022/devel_cb/.private/jetson_nodes/share/jetson_nodes/cmake/jetson_nodesConfig.cmake /home/jimmy/URC_2022/devel_cb/share/jetson_nodes/cmake/jetson_nodesConfig.cmake
