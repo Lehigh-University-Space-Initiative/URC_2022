@@ -1,3 +1,3 @@
-Symlinking /home/jimmy/URC_2022/devel_cb/lib/pkgconfig/pi_nodes.pc
-Symlinking /home/jimmy/URC_2022/devel_cb/share/pi_nodes/cmake/pi_nodesConfig-version.cmake
-Symlinking /home/jimmy/URC_2022/devel_cb/share/pi_nodes/cmake/pi_nodesConfig.cmake
+Linked: (/home/jimmy/URC_2022/devel_cb/.private/pi_nodes/lib/pkgconfig/pi_nodes.pc, /home/jimmy/URC_2022/devel_cb/lib/pkgconfig/pi_nodes.pc)
+Linked: (/home/jimmy/URC_2022/devel_cb/.private/pi_nodes/share/pi_nodes/cmake/pi_nodesConfig-version.cmake, /home/jimmy/URC_2022/devel_cb/share/pi_nodes/cmake/pi_nodesConfig-version.cmake)
+Linked: (/home/jimmy/URC_2022/devel_cb/.private/pi_nodes/share/pi_nodes/cmake/pi_nodesConfig.cmake, /home/jimmy/URC_2022/devel_cb/share/pi_nodes/cmake/pi_nodesConfig.cmake)
