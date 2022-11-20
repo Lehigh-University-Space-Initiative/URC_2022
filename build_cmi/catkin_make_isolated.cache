@@ -1,0 +1,2 @@
+base_nodes:pi_nodes:simulation
+-G Unix Makefiles -DCATKIN_DEVEL_PREFIX=/home/jimmy/URC_2022/devel_cmi -DCMAKE_INSTALL_PREFIX=/home/jimmy/URC_2022/install_isolated

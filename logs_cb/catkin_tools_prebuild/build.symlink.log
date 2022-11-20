@@ -1,0 +1,12 @@
+Symlinking /home/jimmy/URC_2022/devel_cb/./local_setup.bash
+Symlinking /home/jimmy/URC_2022/devel_cb/./local_setup.zsh
+Symlinking /home/jimmy/URC_2022/devel_cb/./env.sh
+Symlinking /home/jimmy/URC_2022/devel_cb/./setup.zsh
+Symlinking /home/jimmy/URC_2022/devel_cb/./setup.sh
+Symlinking /home/jimmy/URC_2022/devel_cb/./local_setup.sh
+Symlinking /home/jimmy/URC_2022/devel_cb/./_setup_util.py
+Symlinking /home/jimmy/URC_2022/devel_cb/./cmake.lock
+Symlinking /home/jimmy/URC_2022/devel_cb/./setup.bash
+Symlinking /home/jimmy/URC_2022/devel_cb/lib/pkgconfig/catkin_tools_prebuild.pc
+Symlinking /home/jimmy/URC_2022/devel_cb/share/catkin_tools_prebuild/cmake/catkin_tools_prebuildConfig-version.cmake
+Symlinking /home/jimmy/URC_2022/devel_cb/share/catkin_tools_prebuild/cmake/catkin_tools_prebuildConfig.cmake

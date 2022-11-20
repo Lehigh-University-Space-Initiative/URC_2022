@@ -1,0 +1,5 @@
+base_nodes
+/home/jimmy/URC_2022/devel_cb/.private/base_nodes/cmake.lock /home/jimmy/URC_2022/devel_cb/./cmake.lock
+/home/jimmy/URC_2022/devel_cb/.private/base_nodes/lib/pkgconfig/base_nodes.pc /home/jimmy/URC_2022/devel_cb/lib/pkgconfig/base_nodes.pc
+/home/jimmy/URC_2022/devel_cb/.private/base_nodes/share/base_nodes/cmake/base_nodesConfig-version.cmake /home/jimmy/URC_2022/devel_cb/share/base_nodes/cmake/base_nodesConfig-version.cmake
+/home/jimmy/URC_2022/devel_cb/.private/base_nodes/share/base_nodes/cmake/base_nodesConfig.cmake /home/jimmy/URC_2022/devel_cb/share/base_nodes/cmake/base_nodesConfig.cmake

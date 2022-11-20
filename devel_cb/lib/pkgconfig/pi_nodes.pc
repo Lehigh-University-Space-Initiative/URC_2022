@@ -1,0 +1,1 @@
+/home/jimmy/URC_2022/devel_cb/.private/pi_nodes/lib/pkgconfig/pi_nodes.pc
