@@ -10,3 +10,5 @@ devel
 logs_cb/*
 build_cb/*
 devel_cb/*
+.catkin_tools
+*.log
