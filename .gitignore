@@ -10,5 +10,7 @@ devel
 logs_cb/*
 build_cb/*
 devel_cb/*
-.catkin_tools
+.catkin_tools/*
 *.log
+*.swp
+.catkin_tools/profiles/default/devel_collisions.txt
