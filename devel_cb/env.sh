@@ -1,1 +1,0 @@
-/home/jimmy/URC_2022/devel_cb/.private/catkin_tools_prebuild/env.sh
