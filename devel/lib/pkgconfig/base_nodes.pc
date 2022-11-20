@@ -1,0 +1,8 @@
+prefix=/home/michael/URC_2022/devel
+
+Name: base_nodes
+Description: Description of base_nodes
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

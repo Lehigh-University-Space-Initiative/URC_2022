@@ -1,2 +1,0 @@
-
--DCATKIN_DEVEL_PREFIX=/home/michael/URC_2022/devel -DCMAKE_INSTALL_PREFIX=/home/michael/URC_2022/install -G Unix Makefiles
