@@ -6,4 +6,8 @@
 
 use `catkin build [package name] [package 2 name] ...` to build a package or `catkin build` to build everything
 
+https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html
 
+## Other
+
+[Ros Tutorials](https://wiki.ros.org/ROS/Tutorials)
