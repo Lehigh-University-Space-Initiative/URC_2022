@@ -1,8 +1,0 @@
-prefix=/home/michael/URC_2022/install_cb
-
-Name: jetson_nodes
-Description: Description of jetson_nodes
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: roscpp rospy std_msgs
