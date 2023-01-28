@@ -1,6 +1,5 @@
 build/*
 CMakeCache.txt
-CMakeLists.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
@@ -10,6 +9,7 @@ devel
 logs_cb/*
 build_cb/*
 devel_cb/*
+install_cb/*
 .catkin_tools/*
 *.log
 *.swp
