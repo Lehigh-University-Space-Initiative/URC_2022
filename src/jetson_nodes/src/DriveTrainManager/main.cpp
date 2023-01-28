@@ -5,5 +5,9 @@
 #include <sstream>
 
 int main(int argc, char** argv) {
-    printf("Drive Train Manager");
+    
+   ros::init(argc, argv, "DriverTrainManager"); 
+
+   ros::NodeHandle n;
+
 }
