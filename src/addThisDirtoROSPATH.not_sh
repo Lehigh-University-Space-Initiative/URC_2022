@@ -1,0 +1,6 @@
+#!/bin/bash
+# cd "$(dirname "$0")"
+# echo $PWD
+#Run this line in terminal when in this dir to add to ros path
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$PWD
+# echo $ROS_PACKAGE_PATH
