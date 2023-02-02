@@ -25,28 +25,14 @@ import OpenGL.GL as gl
 import imgui
 from imgui.integrations.glfw import GlfwRenderer
 
-
-
-active = {
-    "window": True,
-    "child": False,
-    "tooltip": False,
-    "menu bar": False,
-    "popup": False,
-    "popup modal": False,
-    "popup context item": False,
-    "popup context window": False,
-    "drag drop": False,
-    "group": False,
-    "tab bar": False,
-    "list box": False,
-    "popup context void": False,
-    "table": False,
-}
+import GuiPanel
 
 path_to_font = None  # "path/to/font.ttf"
 
-opened_state = True
+panels = [
+    GuiPanel.GUIPanel("Status Panel"),
+    GuiPanel.GUIPanel("Info Panel"),
+]
 
 
 def frame_commands():
@@ -68,37 +54,10 @@ def frame_commands():
             imgui.end_menu()
         imgui.end_main_menu_bar()
 
-    
-
-        imgui.begin("Example: table")
-        if imgui.begin_table("data", 2):
-            imgui.table_next_column()
-            imgui.table_header("A")
-            imgui.table_next_column()
-            imgui.table_header("B")
-
-            imgui.table_next_row()
-            imgui.table_next_column()
-            imgui.text("123")
-
-            imgui.table_next_column()
-            imgui.text("456")
-
-            imgui.table_next_row()
-            imgui.table_next_column()
-            imgui.text("789")
-
-            imgui.table_next_column()
-            imgui.text("111")
-
-            imgui.table_next_row()
-            imgui.table_next_column()
-            imgui.text("222")
-
-            imgui.table_next_column()
-            imgui.text("333")
-            imgui.end_table()
-        imgui.end()
+    viewport = imgui.GetMainViewport()
+    dockspace_id = imgui.GetID("MyDockSpace")
+     
+     
 
 
 def render_frame(impl, window, font):
