@@ -1,4 +1,6 @@
 
+import imgui
+
 class GUIPanel:
     def __init__(self, panelName):
         self.panelName = panelName;
@@ -10,4 +12,6 @@ class GUIPanel:
 
     # called by outside methods to render pannel into view
     def drawInView(self):
+        imgui.begin(self.panelName, True)
         self.drawPanel(); 
+        imgui.end()

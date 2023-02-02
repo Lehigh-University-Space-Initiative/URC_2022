@@ -54,10 +54,36 @@ def frame_commands():
             imgui.end_menu()
         imgui.end_main_menu_bar()
 
-    viewport = imgui.GetMainViewport()
+    for i in panels:
+        i.drawInView()
+
+
+def setupDefaultDocking(window): 
+    # viewport = imgui.GetMainViewport()
     dockspace_id = imgui.GetID("MyDockSpace")
-     
-     
+
+    dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode
+
+
+    imgui.DockBuilderRemoveNode(dockspace_id); # clear any previous layout
+    imgui.DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
+    imgui.DockBuilderSetNodeSize(dockspace_id, window.Size);
+
+
+
+    dock_id_top = imgui.DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.2, nullptr, dockspace_id);
+    dock_id_down = imgui.DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.25, nullptr, dockspace_id);
+    dock_id_left = imgui.DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2, nullptr, dockspace_id);
+    dock_id_right = imgui.DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.15, nullptr, dockspace_id);
+
+    imgui.DockBuilderDockWindow("Window 1", dock_id_top);
+    imgui.DockBuilderDockWindow("Window 2", dock_id_right);
+    imgui.DockBuilderDockWindow("Window 3", dock_id_left);
+    imgui.DockBuilderDockWindow("Window 4", dock_id_down);
+    imgui.DockBuilderDockWindow("Window 0", dock_id_top);
+
+
+    imgui.DockBuilderFinish(dockspace_id);
 
 
 def render_frame(impl, window, font):
@@ -112,6 +138,8 @@ def main():
     io = imgui.get_io()
     jb = io.fonts.add_font_from_file_ttf(path_to_font, 30) if path_to_font is not None else None
     impl.refresh_font_texture()
+
+    # setupDefaultDocking(window);
 
     while not glfw.window_should_close(window):
         render_frame(impl, window, jb)
