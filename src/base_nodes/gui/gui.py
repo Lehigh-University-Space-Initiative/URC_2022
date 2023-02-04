@@ -57,6 +57,8 @@ def frame_commands():
     for i in panels:
         i.drawInView()
 
+def setupWindows(window):
+    pass
 
 def setupDefaultDocking(window): 
     # viewport = imgui.GetMainViewport()
@@ -140,6 +142,7 @@ def main():
     impl.refresh_font_texture()
 
     # setupDefaultDocking(window);
+    setupWindows(window)
 
     while not glfw.window_should_close(window):
         render_frame(impl, window, jb)
