@@ -1,3 +1,8 @@
 <launch>
     <node pkg="base_nodes" name="station_gui" type="gui.py" />
+
+    <!-- setup joy node -->
+
+    <!-- setup JoyMapper -->
+    <node pkg="base_nodes" name="joy_mapper" type="JoyMapper_node" />
 </launch>

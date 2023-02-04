@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  cross_pkg_messages
+  sensor_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -205,6 +207,10 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-catkin_install_python(PROGRAMS gui/gui.py
+catkin_install_python(PROGRAMS src/gui/gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+add_executable(JoyMapper_node src/joyMapper/joyMapper.cpp)
+target_link_libraries(JoyMapper_node ${catkin_LIBRARIES})
+add_dependencies(JoyMapper_node ${catkin_EXPORTED_TARGETS})

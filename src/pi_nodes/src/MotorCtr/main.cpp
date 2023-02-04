@@ -7,7 +7,7 @@
 
 int main(int argc, char** argv) {
     
-   ros::init(argc, argv, "DriverTrainManager"); 
+   ros::init(argc, argv, "Motor Controller"); 
 
    ros::NodeHandle n;
 
