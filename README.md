@@ -11,3 +11,7 @@ https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html
 ## Other
 
 [Ros Tutorials](https://wiki.ros.org/ROS/Tutorials)
+
+## Running
+ during testing on one computer this command will start the full system: 
+ `roslaunch base_nodes fullSystemSingle.launch debug:=true`

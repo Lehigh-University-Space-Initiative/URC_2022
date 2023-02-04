@@ -204,3 +204,8 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+add_executable(MotorCtr_node src/MotorCtr/main.cpp)
+target_link_libraries(MotorCtr_node ${catkin_LIBRARIES})
+add_dependencies(MotorCtr_node ${catkin_EXPORTED_TARGETS})

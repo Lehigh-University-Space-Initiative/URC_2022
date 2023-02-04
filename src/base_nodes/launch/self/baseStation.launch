@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="base_nodes" name="station_gui" type="gui.py" />
+</launch>
