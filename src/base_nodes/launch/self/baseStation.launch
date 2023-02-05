@@ -1,8 +1,25 @@
 <launch>
+    <arg name="debug" default="false" />
     <node pkg="base_nodes" name="station_gui" type="gui.py" />
 
-    <!-- setup joy node -->
+    <!-- if debug, include debug tools -->
+    <group if="$(arg debug)">
+        <include file="$(find base_nodes)/launch/self/debugTools.launch"/>
+    </group>
+
+    <!-- setup joy nodes, one for js0 and onefor js1 -->
+    <node pkg="joy" name="joy0_node" type="joy_node">
+        <param name="dev" value="/dev/input/js0" />
+        <param name="coalesce_interval" value="0.1" />
+        <remap from="joy" to="joy0" />
+    </node>
+
+    <node pkg="joy" name="joy1_node" type="joy_node">
+        <param name="dev" value="/dev/input/js1" />
+        <param name="coalesce_interval" value="0.1" />
+        <remap from="joy" to="joy1" />
+    </node>
 
     <!-- setup JoyMapper -->
-    <node pkg="base_nodes" name="joy_mapper" type="JoyMapper_node" />
+    <node pkg="base_nodes" name="joy_mapper" type="JoyMapper_node" output="screen" />
 </launch>

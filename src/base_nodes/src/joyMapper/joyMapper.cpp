@@ -9,12 +9,12 @@ ros::Publisher manualDrive_pub;
 
 void joyCallback(const sensor_msgs::JoyConstPtr& msg) {
    //print out the first 3 axes and the first 3 buttons
-    ROS_INFO("I heard: [%d]", msg->axes[0]);
-    ROS_INFO("I heard: [%d]", msg->axes[1]);
-    ROS_INFO("I heard: [%d]", msg->axes[2]);
-    ROS_INFO("I heard: [%d]", msg->buttons[0]);
-    ROS_INFO("I heard: [%d]", msg->buttons[1]);
-    ROS_INFO("I heard: [%d]", msg->buttons[2]);
+   //  ROS_INFO("I heard: [%f]", msg->axes[0]);
+   //  ROS_INFO("I heard: [%f]", msg->axes[1]);
+   //  ROS_INFO("I heard: [%f]", msg->axes[2]);
+   //  ROS_INFO("I heard: [%f]", msg->buttons[0]);
+   //  ROS_INFO("I heard: [%f]", msg->buttons[1]);
+   //  ROS_INFO("I heard: [%f]", msg->buttons[2]);
 
     //construct a zeroed ManualDriveCMD
     cross_pkg_messages::ManualDriveCMD cmd;
@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
    //register callbacks 
 
    //the queue is set very small so the latest command is always used
-   ros::Subscriber sub = n.subscribe("joy", 1000, joyCallback);
+   ros::Subscriber sub = n.subscribe("joy0", 1000, joyCallback);
 
    ros::spin();
 
