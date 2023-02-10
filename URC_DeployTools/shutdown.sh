@@ -8,7 +8,7 @@ hostUsers=("jimmy" "pi")
 hostPwords=("lusi" "lusi")
 
 shutdownHost() {
-    echo "Rebooting ${hostNames[$1]}"
+    echo "Commencing shutdown of ${hostNames[$1]}"
     sshpass -p "${hostPwords[$1]}" ssh "${hostUsers[$1]}@${hostNames[$1]}" "echo ${hostPwords[$1]} | sudo -S poweroff"
 }
 
