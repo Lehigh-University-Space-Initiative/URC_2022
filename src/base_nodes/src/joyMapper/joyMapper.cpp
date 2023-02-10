@@ -5,7 +5,11 @@
 #include "cross_pkg_messages/ManualDriveCMD.h"
 #include "sensor_msgs/Joy.h"
 
+#include "cs_libguarded/cs_libguarded.h"
+
 ros::Publisher manualDrive_pub;
+
+libguarded::plain_guarded<int> x;
 
 void joyCallback(const sensor_msgs::JoyConstPtr& msg) {
    //print out the first 3 axes and the first 3 buttons
@@ -17,13 +21,13 @@ void joyCallback(const sensor_msgs::JoyConstPtr& msg) {
    //  ROS_INFO("I heard: [%f]", msg->buttons[2]);
 
     //construct a zeroed ManualDriveCMD
-    cross_pkg_messages::ManualDriveCMD cmd;
-    cmd.value.x = 0;
-    cmd.value.y = 0;
-    cmd.value.z = 0;
+   //  cross_pkg_messages::ManualDriveCMD cmd;
+   //  cmd.value.x = 0;
+   //  cmd.value.y = 0;
+   //  cmd.value.z = 0;
     
     //send the command
-    // manualDrive_pub.publish(cmd);
+   //  manualDrive_pub.publish(cmd);
 }
 
 int main(int argc, char** argv) {

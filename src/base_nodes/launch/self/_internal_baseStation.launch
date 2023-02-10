@@ -7,15 +7,15 @@
         <include file="$(find base_nodes)/launch/self/debugTools.launch"/>
     </group>
 
-    <!-- setup joy nodes, one for js0 and onefor js1 -->
+    <!-- setup joy nodes, one for js0 and onefor js1, in the ubuntu vm, js0 is mouse-->
     <node pkg="joy" name="joy0_node" type="joy_node">
-        <param name="dev" value="/dev/input/js0" />
+        <param name="dev" value="/dev/input/js1" />
         <param name="coalesce_interval" value="0.1" />
         <remap from="joy" to="joy0" />
     </node>
 
     <node pkg="joy" name="joy1_node" type="joy_node">
-        <param name="dev" value="/dev/input/js1" />
+        <param name="dev" value="/dev/input/js2" />
         <param name="coalesce_interval" value="0.1" />
         <remap from="joy" to="joy1" />
     </node>
