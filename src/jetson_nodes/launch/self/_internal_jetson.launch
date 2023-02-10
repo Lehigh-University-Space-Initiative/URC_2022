@@ -1,0 +1,3 @@
+<launch>
+   <node pkg="jetson_nodes" name="DriveTrainManager" type="DriveTrainManager_node" output="screen" />
+</launch>

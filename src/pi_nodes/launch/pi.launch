@@ -1,0 +1,4 @@
+<launch>
+    <env name="ROS_MASTER_URI" value="http://192.168.1.3:11311"/>
+   <include file="$(find pi_nodes)/launch/_internal_pi.launch"/>
+</launch>

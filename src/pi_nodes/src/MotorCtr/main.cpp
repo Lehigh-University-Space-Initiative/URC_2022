@@ -7,8 +7,11 @@
 
 int main(int argc, char** argv) {
     
-   ros::init(argc, argv, "Motor Controller"); 
+   ros::init(argc, argv, "Motor_CTR"); 
 
    ros::NodeHandle n;
 
+   while (ros::ok) {
+      
+   }
 }

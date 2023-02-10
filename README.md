@@ -15,3 +15,9 @@ https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html
 ## Running
  during testing on one computer this command will start the full system: 
  `roslaunch base_nodes fullSystemSingle.launch debug:=true`
+
+# Deploying
+
+use the Urc_DeployTools/deploy.sh script to copy, compile and optionally reboot the rover computers with the new source code
+
+the computers should be setup to run their respective {compName}.launch file upon startup

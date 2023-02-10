@@ -1,25 +1,17 @@
 <launch>
+    <!-- <arg name="multiComp" default="true" /> -->
     <arg name="debug" default="false" />
-    <node pkg="base_nodes" name="station_gui" type="gui.py" />
 
-    <!-- if debug, include debug tools -->
-    <group if="$(arg debug)">
-        <include file="$(find base_nodes)/launch/self/debugTools.launch"/>
-    </group>
-
-    <!-- setup joy nodes, one for js0 and onefor js1 -->
-    <node pkg="joy" name="joy0_node" type="joy_node">
-        <param name="dev" value="/dev/input/js0" />
-        <param name="coalesce_interval" value="0.1" />
-        <remap from="joy" to="joy0" />
-    </node>
-
-    <node pkg="joy" name="joy1_node" type="joy_node">
-        <param name="dev" value="/dev/input/js1" />
-        <param name="coalesce_interval" value="0.1" />
-        <remap from="joy" to="joy1" />
-    </node>
-
-    <!-- setup JoyMapper -->
-    <node pkg="base_nodes" name="joy_mapper" type="JoyMapper_node" output="screen" />
+    <!-- <group if="$(arg multiComp)"> -->
+        <!-- <env name="ROS_MASTER_URI" value="http://192.168.1.3:11311"/> -->
+        <!-- <include file="$(find base_nodes)/launch/self/_internal_baseStation.launch"/> -->
+    <!-- </group> -->
+        <include file="$(find base_nodes)/launch/self/_internal_baseStation.launch">
+            <arg name="debug" value="$(arg debug)"/>
+        </include>
+    <!-- <group unless="$(arg multiComp)">
+    <include file="$(find base_nodes)/launch/self/_internal_baseStation.launch">
+        <arg name="debug" value="$(arg debug)"/>
+    </include>
+    </group> -->
 </launch>
