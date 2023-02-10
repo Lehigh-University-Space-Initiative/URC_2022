@@ -104,7 +104,7 @@ if [ "$1" == "-cp" ]; then
     cpyOnly=1
 fi
 
-for I in 0 1
+for I in 1 0
 do
     deployToHost ${I} "${cpyOnly}"
     if [ "${cpyOnly}" == "0" ]; then
