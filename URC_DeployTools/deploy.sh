@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #first host is jetson and second is pi
-hostNames=("192.168.1.3" "192.168.1.5")
+# hostNames=("192.168.1.3" "192.168.1.5")
 #use this if pi is on internet through ZeroTier vpn
-# hostNames=("192.168.1.3" "10.147.19.187")
+hostNames=("192.168.1.3" "10.147.19.187")
 hostUsers=("jimmy" "pi")
 hostPwords=("lusi" "lusi")
 hostDeployDirs=("/home/jimmy/urc_deploy" "/home/pi/urc_deploy")
@@ -104,7 +104,9 @@ if [ "$1" == "-cp" ]; then
     cpyOnly=1
 fi
 
-for I in 1 0
+# hostsToUpdate=(1 0)
+
+for I in 1
 do
     deployToHost ${I} "${cpyOnly}"
     if [ "${cpyOnly}" == "0" ]; then

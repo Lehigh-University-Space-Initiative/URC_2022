@@ -5,29 +5,33 @@
 #include "cross_pkg_messages/ManualDriveCMD.h"
 #include "sensor_msgs/Joy.h"
 
-#include "cs_libguarded/cs_libguarded.h"
+// #include "cs_libguarded/cs_libguarded.h"
 
 ros::Publisher manualDrive_pub;
 
-libguarded::plain_guarded<int> x;
 
-void joyCallback(const sensor_msgs::JoyConstPtr& msg) {
-   //print out the first 3 axes and the first 3 buttons
-   //  ROS_INFO("I heard: [%f]", msg->axes[0]);
-   //  ROS_INFO("I heard: [%f]", msg->axes[1]);
-   //  ROS_INFO("I heard: [%f]", msg->axes[2]);
-   //  ROS_INFO("I heard: [%f]", msg->buttons[0]);
-   //  ROS_INFO("I heard: [%f]", msg->buttons[1]);
-   //  ROS_INFO("I heard: [%f]", msg->buttons[2]);
+// geometry_msgs::Vector3 differentialDriveMapper(double driveAxis, double turnAxis) {
 
-    //construct a zeroed ManualDriveCMD
-   //  cross_pkg_messages::ManualDriveCMD cmd;
-   //  cmd.value.x = 0;
-   //  cmd.value.y = 0;
-   //  cmd.value.z = 0;
-    
-    //send the command
-   //  manualDrive_pub.publish(cmd);
+// }
+
+sensor_msgs::JoyConstPtr last0MSG;
+sensor_msgs::JoyConstPtr last1MSG;
+
+void joy0Callback(const sensor_msgs::JoyConstPtr& msg) {
+   last0MSG = msg;
+}
+void joy1Callback(const sensor_msgs::JoyConstPtr& msg) {
+   last1MSG = msg;
+}
+
+void sendCMD() {
+   cross_pkg_messages::ManualDriveCMD cmd;
+   cmd.value.x = last0MSG->axes[1];
+   cmd.value.y = last1MSG->axes[1];
+   cmd.value.z = 0; // this is ignored
+
+   // send the command
+   manualDrive_pub.publish(cmd);
 }
 
 int main(int argc, char** argv) {
@@ -43,7 +47,8 @@ int main(int argc, char** argv) {
    //register callbacks 
 
    //the queue is set very small so the latest command is always used
-   ros::Subscriber sub = n.subscribe("joy0", 1000, joyCallback);
+   ros::Subscriber sub1 = n.subscribe("joy0", 1000, joy0Callback);
+   ros::Subscriber sub2 = n.subscribe("joy1", 1000, joy1Callback);
 
    ros::spin();
 
