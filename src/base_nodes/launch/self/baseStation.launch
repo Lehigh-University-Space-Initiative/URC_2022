@@ -1,0 +1,17 @@
+<launch>
+    <!-- <arg name="multiComp" default="true" /> -->
+    <arg name="debug" default="false" />
+
+    <!-- <group if="$(arg multiComp)"> -->
+        <!-- <env name="ROS_MASTER_URI" value="http://192.168.1.3:11311"/> -->
+        <!-- <include file="$(find base_nodes)/launch/self/_internal_baseStation.launch"/> -->
+    <!-- </group> -->
+        <include file="$(find base_nodes)/launch/self/_internal_baseStation.launch">
+            <arg name="debug" value="$(arg debug)"/>
+        </include>
+    <!-- <group unless="$(arg multiComp)">
+    <include file="$(find base_nodes)/launch/self/_internal_baseStation.launch">
+        <arg name="debug" value="$(arg debug)"/>
+    </include>
+    </group> -->
+</launch>

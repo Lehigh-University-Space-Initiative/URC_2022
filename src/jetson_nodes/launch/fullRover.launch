@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find jetson_nodes)/launch/fullRover_internal.launch">
+        <arg name="singleComputer" value="false" />
+    </include>
+</launch>

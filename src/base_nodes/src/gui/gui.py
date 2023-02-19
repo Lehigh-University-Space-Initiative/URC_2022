@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import rospy
+from sensor_msgs.msg import Joy
 
 import os
 import sys
@@ -56,6 +57,12 @@ def frame_commands():
 
     for i in panels:
         i.drawInView()
+
+    imgui.begin("Test")
+    # imgui.text("Hello")
+    for val in joyAxes:
+        imgui.text("Axes: " + str(val))
+    imgui.end()
 
 def setupWindows(window):
     pass
@@ -130,8 +137,16 @@ def impl_glfw_init():
 
     return window
 
+joyAxes = []
+
+def joyGot(values):
+    global joyAxes
+    joyAxes = values.axes;
 
 def main():
+    rospy.init_node('Station GUI')
+    rospy.Subscriber("joy0", Joy, joyGot)
+
     imgui.create_context()
     window = impl_glfw_init()
 

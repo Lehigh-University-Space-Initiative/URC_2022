@@ -1,0 +1,4 @@
+<launch>
+   <!-- <node pkg="jetson_nodes" name="DriveTrainManager" type="DriveTrainManager_node" output="screen" /> -->
+   <include file="$(find jetson_nodes)/launch/self/_internal_jetson.launch" />
+</launch>

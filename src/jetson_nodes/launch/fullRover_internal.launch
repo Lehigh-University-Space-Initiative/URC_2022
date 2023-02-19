@@ -1,0 +1,5 @@
+<launch>
+    <arg name="singleComputer" default="false" />
+    <!-- run the self/jetson.launch file -->
+    <include file="$(find jetson_nodes)/launch/self/jetson.launch" />
+</launch>

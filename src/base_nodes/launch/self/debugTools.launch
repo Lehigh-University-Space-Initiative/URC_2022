@@ -1,0 +1,4 @@
+<launch>
+    <!-- launch rqt_graph -->
+    <node pkg="rqt_graph" type="rqt_graph" name="rqt_graph"  />
+</launch>

@@ -1,0 +1,9 @@
+<launch>
+    <arg name="debug" default="false" />
+    <include file="$(find base_nodes)/launch/self/baseStation.launch">
+        <arg name="debug" value="$(arg debug)"/>
+    </include>
+    <include file="$(find jetson_nodes)/launch/fullRoverSingle.launch"/>
+    
+
+</launch>
