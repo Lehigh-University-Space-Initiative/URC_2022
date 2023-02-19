@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #first host is jetson and second is pi
-# hostNames=("192.168.1.3" "192.168.1.5")
+hostNames=("192.168.1.3" "192.168.1.5")
 #use this if pi is on internet through ZeroTier vpn
-hostNames=("192.168.1.3" "10.147.19.187")
+# hostNames=("192.168.1.3" "10.147.19.187")
 hostUsers=("jimmy" "pi")
 hostPwords=("lusi" "lusi")
 hostDeployDirs=("/home/jimmy/urc_deploy" "/home/pi/urc_deploy")
@@ -83,6 +83,8 @@ deployToHost()
     arg2="${hostUsers[$1]}@${hostNames[$1]}:${hostDeployDirs[$1]}"
     echo "Copying src files from ${arg1} to ${arg2}"
 
+    #clean the local dir
+    # sshpass -p "${hostPwords[$1]}" rm -rf ${arg2}${localDirsToCpy[0]}
     # if sshpass command not found, need to install it on that machine
     sshpass -p "${hostPwords[$1]}" scp -r ${arg1}${localDirsToCpy[0]} ${arg2}
     
@@ -106,7 +108,7 @@ fi
 
 # hostsToUpdate=(1 0)
 
-for I in 1
+for I in 1 0
 do
     deployToHost ${I} "${cpyOnly}"
     if [ "${cpyOnly}" == "0" ]; then

@@ -161,6 +161,7 @@ PWMSparkMax::PWMSparkMax(int pin)
     : pin(pin)
 {
     setupGPIO();
+    setPower(0);
 }
 
 void PWMSparkMax::terminateGPIO()

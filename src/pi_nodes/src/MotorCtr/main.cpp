@@ -8,8 +8,15 @@
 #include "geometry_msgs/Vector3.h"
 #include "CANDriver.h"
 
-void gotCommands(const cross_pkg_messages::RoverComputerDriveCMD& msg) {
+//drive motors
+PWMSparkMax leftSide(18);
+// PWMSparkMax rightSide(18);
 
+
+void gotCommands(const cross_pkg_messages::RoverComputerDriveCMD& msg) {
+   ROS_INFO(("setting power to " + std::to_string(msg.CMD_L.x)).c_str());
+   leftSide.setPower(msg.CMD_L.x);
+   //do right
 }
 
 int main(int argc, char** argv) {
@@ -18,11 +25,11 @@ int main(int argc, char** argv) {
 
    ros::NodeHandle n;
 
-   // ros::Subscriber sub = n.subscribe("roverDriveCommands", 1, gotCommands);
+   ros::Subscriber sub = n.subscribe("roverDriveCommands", 1000, gotCommands);
 
-   ROS_INFO("HEllo there");
+   ROS_INFO("Motor CTR startup");
 
-   ros::spinOnce();
+   // ros::spinOnce();
 
    // while (ros::ok) {
       
@@ -37,22 +44,9 @@ int main(int argc, char** argv) {
    // sleep(1);
    // con.sendPowerCMD(0.0);
 
-   // ros::spinOnce();
-
-   ROS_INFO("testing pwm cont");
-
-   PWMSparkMax pwm(18);
-
-   //wait 1 second, spin at 0.2 power wait 1 second, spin at 0.0 power
-   sleep(1);
-   pwm.setPower(0.2);
-   ROS_INFO("spinning");
-   sleep(100);
-   pwm.setPower(0.0);
-   ROS_INFO("spinning at 0.0");
+   ros::spin();
 
    //dealloc
 
-   // CANDriver::closeCAN();
-   PWMSparkMax::terminateGPIO();
+   CANDriver::closeCAN();
 }

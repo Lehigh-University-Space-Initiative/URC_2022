@@ -15,7 +15,7 @@ void sendDrivePowers() {
 }
 
 void manualInputCalback(const cross_pkg_messages::ManualDriveCMDConstPtr& msg) {
-   // ROS_INFO("I heard: [%d]", msg->value.x);
+   ROS_INFO("I heard: [%d]", msg->value.x);
 
    //TODO: convert to pid:
    currentDriveCommand.CMD_L.x = msg->value.x;
@@ -27,6 +27,7 @@ void manualInputCalback(const cross_pkg_messages::ManualDriveCMDConstPtr& msg) {
    currentDriveCommand.CMD_R.z = msg->value.y;
 
    sendDrivePowers();
+   // ROS_INFO("sent updated mtr comands");
 }
 
 int main(int argc, char** argv) {
@@ -43,8 +44,8 @@ int main(int argc, char** argv) {
    //register callbacks 
 
    //the queue is set very small so the latest command is always used
-   ros::Subscriber sub = n.subscribe("manualCommands", 1, manualInputCalback);
-   driveTrainPublisher = n.advertise<cross_pkg_messages::RoverComputerDriveCMD>("roverDriveCommands", 1);
+   ros::Subscriber sub = n.subscribe("manualCommands", 10, manualInputCalback);
+   driveTrainPublisher = n.advertise<cross_pkg_messages::RoverComputerDriveCMD>("roverDriveCommands", 10);
 
    while (ros::ok()) {
       //proccsing
