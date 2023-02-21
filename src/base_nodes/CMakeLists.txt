@@ -207,10 +207,25 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-catkin_install_python(PROGRAMS src/gui/gui.py
+catkin_install_python(PROGRAMS src/old_gui/gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+#Joy Mapper
 add_executable(JoyMapper_node src/joyMapper/joyMapper.cpp)
 target_link_libraries(JoyMapper_node ${catkin_LIBRARIES})
 add_dependencies(JoyMapper_node ${catkin_EXPORTED_TARGETS})
+
+#GUI
+file(GLOB GUIFiles
+     "src/gui/*.cpp"
+     "src/gui/panels/*.cpp"
+     "../../vendor/imgui2/*.cpp"
+     "../../vendor/imgui2/backends/imgui_impl_glfw.cpp"
+     "../../vendor/imgui2/backends/imgui_impl_opengl3.cpp"
+)
+
+add_executable(GroundStationGUI ${GUIFiles})
+target_include_directories(GroundStationGUI PRIVATE ../../vendor/imgui2 ../../vendor/imgui2/backends include/cs_libguarded)
+target_link_libraries(GroundStationGUI ${catkin_LIBRARIES} glfw GL dl)
+add_dependencies(GroundStationGUI ${catkin_EXPORTED_TARGETS})
