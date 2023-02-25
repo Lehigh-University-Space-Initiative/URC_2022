@@ -1,6 +1,7 @@
 <launch>
     <arg name="debug" default="false" />
-    <node pkg="base_nodes" name="station_gui" type="gui.py" />
+    <!-- <node pkg="base_nodes" name="station_gui" type="gui.py" /> -->
+    <node pkg="base_nodes" name="GroundStationGUI" type="GroundStationGUI" />
 
     <!-- if debug, include debug tools -->
     <group if="$(arg debug)">

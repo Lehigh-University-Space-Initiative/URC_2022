@@ -176,8 +176,12 @@ bool PWMSparkMax::gpioSetup = false;
 
 void PWMSparkMax::setPower(float power)
 {
+    float limitPower = 0.4f;
+    float deadZone = 0.08f;
     //safety limet
-    power = min(max(power, -0.6f),0.6f);
+    power = min(max(power, -limitPower),limitPower);
+
+    // if (abs(power) < deadZone) {power = 0;}
 
     //reinit lib if needed
     if (gpioInitialise() < 0) {
