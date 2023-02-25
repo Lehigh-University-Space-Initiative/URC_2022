@@ -10,13 +10,15 @@
 
 //drive motors
 PWMSparkMax leftSide(18);
-// PWMSparkMax rightSide(18);
+PWMSparkMax rightSide(19);
+// PWMSparkMax rightSide2(13);
+// PWMSparkMax rightSide3(19);
 
 
 void gotCommands(const cross_pkg_messages::RoverComputerDriveCMD& msg) {
    ROS_INFO(("setting power to " + std::to_string(msg.CMD_L.x)).c_str());
-   leftSide.setPower(msg.CMD_L.x);
-   //do right
+   // leftSide.setPower(msg.CMD_L.x);
+   rightSide.setPower(-msg.CMD_R.x);
 }
 
 int main(int argc, char** argv) {
@@ -43,6 +45,9 @@ int main(int argc, char** argv) {
    // con.sendPowerCMD(0.1);
    // sleep(1);
    // con.sendPowerCMD(0.0);
+
+   // leftSide.setPower(0.1);
+   // rightSide.setPower(0.1);
 
    ros::spin();
 

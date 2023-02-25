@@ -72,6 +72,9 @@
         "cfenv": "cpp",
         "cinttypes": "cpp",
         "typeindex": "cpp",
-        "typeinfo": "cpp"
-    }
+        "typeinfo": "cpp",
+        "random": "cpp",
+        "regex": "cpp"
+    },
+    "cmake.sourceDirectory": "${workspaceFolder}/vendor/imgui2/examples/example_glfw_vulkan"
 }

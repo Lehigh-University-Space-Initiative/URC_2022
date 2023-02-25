@@ -11,12 +11,16 @@
 
 #include "panels/ComStatusPanel.h"
 #include "panels/TelemetryPanel.h"
+#include "panels/SystemControlPanel.h"
+#include "panels/VideoViewPanel.h"
 
 std::vector<Panel*> uiPanels{};
 
 void loadPanels() {
    uiPanels.push_back(new ComStatusPanel("COMS Status"));
    uiPanels.push_back(new TelemetryPanel("Telemetry"));
+   uiPanels.push_back(new SystemControlPanel("System Control"));
+   uiPanels.push_back(new VideoViewPanel("Video Stream"));
 
    for(auto p : uiPanels) {
       p->setup();
@@ -40,6 +44,11 @@ int main(int argc, char** argv) {
 
    while (ros::ok() && !glfwWindowShouldClose(window)) {
       glfwPollEvents();
+
+      //ros updates
+      ros::spinOnce();
+      for (auto pan : uiPanels)
+         pan->update();
 
       // Start the Dear ImGui frame
       ImGui_ImplOpenGL3_NewFrame();

@@ -36,7 +36,7 @@ GLFWwindow* setupIMGUI()
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "LUSI Ground Station", NULL, NULL);
     if (window == NULL)
         exit(1);
     glfwMakeContextCurrent(window);

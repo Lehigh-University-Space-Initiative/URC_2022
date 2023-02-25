@@ -17,3 +17,5 @@
 #include "cross_pkg_messages/ManualDriveCMD.h"
 #include "cross_pkg_messages/RoverComputerDriveCMD.h"
 #include "sensor_msgs/Joy.h"
+#include "sensor_msgs/image_encodings.h"
+#include <cv_bridge/cv_bridge.h>

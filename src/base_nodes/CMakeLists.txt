@@ -13,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   cross_pkg_messages
   sensor_msgs
+  image_transport
+  cv_bridge
 )
 
 ## System dependencies are found with CMake's conventions
@@ -227,5 +229,5 @@ file(GLOB GUIFiles
 
 add_executable(GroundStationGUI ${GUIFiles})
 target_include_directories(GroundStationGUI PRIVATE ../../vendor/imgui2 ../../vendor/imgui2/backends include/cs_libguarded)
-target_link_libraries(GroundStationGUI ${catkin_LIBRARIES} glfw GL dl)
+target_link_libraries(GroundStationGUI ${catkin_LIBRARIES} glfw GL dl opencv_highgui)
 add_dependencies(GroundStationGUI ${catkin_EXPORTED_TARGETS})

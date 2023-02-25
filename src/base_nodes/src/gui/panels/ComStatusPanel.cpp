@@ -4,9 +4,10 @@ void ComStatusPanel::drawBody()
 {
     for (size_t i = 0; i < hosts.size(); i++)
     {
-        // ImGui::section();
+        ImGui::Separator();
         ImGui::Text((hosts[i]->nickname + " (" + hosts[i]->host + ")").c_str());
 
+        ImGui::SameLine();
 
         ImGui::PushStyleColor(ImGuiCol_Text, conColor(i));
         ImGui::Text(conString(i).c_str());
@@ -49,7 +50,10 @@ ImU32 ComStatusPanel::conColor(size_t hostIndex)
 void ComStatusPanel::setup()
 {
     hosts.push_back(new ComStatusChecker("192.168.1.3", "Jetson"));
-    hosts.push_back(new ComStatusChecker("192.168.1.5", "PI"));
+    hosts.push_back(new ComStatusChecker("192.168.1.5", "Pi"));
+
+    hosts.push_back(new ComStatusChecker("192.168.1.160", "Rover Antenna"));
+    hosts.push_back(new ComStatusChecker("192.168.1.159", "Base Station"));
 }
 
 void ComStatusPanel::update()
@@ -84,7 +88,7 @@ void ComStatusChecker::check()
     if (now - lastCheckTime <= connectionTestFreq) {return;}
 
     auto thread = new std::thread([this]() {
-        int notFound = system(("ping " + host + " -c1 -w1").c_str());
+        int notFound = system(("ping " + host + " -c1 -w1 > nul").c_str());
 
         if (notFound == 0)
         {

@@ -1,0 +1,52 @@
+#pragma once
+#include "../Panel.h"
+#include "../GUI.h"
+#include <chrono>
+#include <thread>
+#include <mutex>
+#include "../ImageHelper.h"
+
+
+
+class VideoViewPanel: public Panel {
+protected:
+
+    struct Camera {
+        int id;
+        std::string name;
+
+        Camera(int id, std::string name);
+    };
+
+    const std::array<Camera,4> cameras = {Camera(0,"Front"),Camera(1,"CAM 2"),Camera(2,"CAM 3"),Camera(3,"CAM 4")};
+
+    const std::string placeholderIMGPath = "/home/urcAssets/LUSNoDownlink.png";
+    // const std::string placeholderIMGPath = "/home/urcAssets/images.jpeg";
+
+    size_t currentCamIndex = 0;
+    size_t newCamIndex = 0;
+    cv::Mat currentImage;
+    ImageHelper* currentImageHolder = nullptr;
+
+    //models:
+
+    ros::Subscriber sub;
+
+    ros::NodeHandle n;
+
+    std::chrono::system_clock::time_point lastFrameTime;
+    bool showingLOS = true;
+
+    virtual void drawBody();
+
+    void setupSubscriber();
+
+    void setNewIMG();
+    void setLOSIMG();
+public:
+    using Panel::Panel;
+
+    virtual void setup() override;
+    virtual void update() override;
+    virtual ~VideoViewPanel();
+};

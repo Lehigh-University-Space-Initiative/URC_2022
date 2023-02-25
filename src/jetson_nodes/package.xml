@@ -61,6 +61,8 @@
 
   <!-- added deps: -->
   <depend>cross_pkg_messages</depend>
+  <depend>image_transport</depend>
+  <depend>cv_bridge</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
