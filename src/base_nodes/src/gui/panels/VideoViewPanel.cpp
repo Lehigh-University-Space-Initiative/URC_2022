@@ -1,5 +1,6 @@
 #include "VideoViewPanel.h"
 
+
 void VideoViewPanel::drawBody()
 {
     for (size_t i = 0; i < cameras.size(); i++)
@@ -44,7 +45,7 @@ void VideoViewPanel::setupSubscriber()
        showingLOS = false;
         setNewIMG(); 
     });
-    sub = n.subscribe("/videoStream/theora", 1, f);
+    sub = n.subscribe("/videoStream/image_raw", 1, f);
 }
 
 void VideoViewPanel::setNewIMG()

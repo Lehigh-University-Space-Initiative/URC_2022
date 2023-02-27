@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
    ROS_INFO("VideoStreamer is running");
    
    //TOOO: set rate to correct amount
-   ros::Rate loop_rate(30.0); 
+   ros::Rate loop_rate(10 );//30.0); 
 
 
    int currentStreamingCam = -1;
@@ -53,13 +53,16 @@ int main(int argc, char** argv) {
                ROS_WARN("Requested Cam does not exist");
                goto finishLoop;
             }
+            ROS_INFO("got cam");
          }
       }
 
       //send frame
+      ROS_INFO("requesting frame");
       cap >> frame;
 
       if(!frame.empty()) {
+         ROS_INFO("sending frame");
          msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
          pub.publish(msg);
          cv::waitKey(1);

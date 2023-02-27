@@ -176,27 +176,35 @@ bool PWMSparkMax::gpioSetup = false;
 
 void PWMSparkMax::setPower(float power)
 {
-    float limitPower = 0.4f;
+    float limitPower = 0.3f;
     float deadZone = 0.08f;
     //safety limet
     power = min(max(power, -limitPower),limitPower);
-
     // if (abs(power) < deadZone) {power = 0;}
 
-    //reinit lib if needed
-    if (gpioInitialise() < 0) {
-        ROS_ERROR("pigpio initialisation failed");
-        // return;
-        throw std::runtime_error("pigpio initialisation failed");
+    if (power == lastSentValue) {
+        return;
     }
+    lastSentValue = power;
+
+
+    //reinit lib if needed
+    // if (gpioInitialise() < 0) {
+    //     ROS_ERROR("pigpio initialisation failed");
+    //     // return;
+    //     throw std::runtime_error("pigpio initialisation failed");
+    // }
 
     //use pwm to send power with pigpio
 
     //set pwm frequency to 100Hz
     auto freq = 100;
-    gpioSetPWMfrequency(pin, freq);
     auto maxRange = 2000;
-    gpioSetPWMrange(pin, maxRange); 
+    if (!initialSetup) {
+        gpioSetPWMfrequency(pin, freq);
+        gpioSetPWMrange(pin, maxRange);
+        initialSetup = true;
+    }
 
     // calcualte duty cycle from power
     //remap [-1,1] of the power to [1000,2000] of the duty cycle

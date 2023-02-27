@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 
    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-   while (ros::ok() && !glfwWindowShouldClose(window)) {
+   while (n.ok() && !glfwWindowShouldClose(window)) {
       glfwPollEvents();
 
       //ros updates
@@ -62,6 +62,7 @@ int main(int argc, char** argv) {
 
       renderFrame(window, clear_color);
    }
+   ROS_INFO("starting down gui");
 
    //cleanup
    {
@@ -73,6 +74,10 @@ int main(int argc, char** argv) {
       glfwDestroyWindow(window);
       glfwTerminate();
    }
+
+   ROS_INFO("Shutting down gui");
+
+   n.shutdown();
 
    return 0;
 }

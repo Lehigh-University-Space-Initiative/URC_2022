@@ -11,16 +11,19 @@
     <!-- setup joy nodes, one for js0 and onefor js1, in the ubuntu vm, js0 is mouse-->
     <node pkg="joy" name="joy0_node" type="joy_node">
         <param name="dev" value="/dev/input/js1" />
-        <param name="coalesce_interval" value="0.1" />
+        <param name="coalesce_interval" value="0.3" />
         <remap from="joy" to="joy0" />
     </node>
 
     <node pkg="joy" name="joy1_node" type="joy_node">
         <param name="dev" value="/dev/input/js2" />
-        <param name="coalesce_interval" value="0.1" />
+        <param name="coalesce_interval" value="0.3" />
         <remap from="joy" to="joy1" />
     </node>
 
     <!-- setup JoyMapper -->
     <node pkg="base_nodes" name="joy_mapper" type="JoyMapper_node" output="screen" />
+
+    <!-- streaming mapping -->
+    <node name="republish" type="republish" pkg="image_transport" output="screen" args="theora in:=/videoStream raw out:=/videoStream/image_raw" />
 </launch>

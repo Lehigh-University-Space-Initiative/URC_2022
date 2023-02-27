@@ -3,11 +3,13 @@
 #include "ros/ros.h"
 #include <sstream>
 #include "cross_pkg_messages/ManualDriveCMD.h"
+#include "cross_pkg_messages/RoverComputerDriveCMD.h"
 #include "sensor_msgs/Joy.h"
 
 // #include "cs_libguarded/cs_libguarded.h"
 
 ros::Publisher manualDrive_pub;
+ros::Publisher manualArm_pub;
 
 
 // geometry_msgs::Vector3 differentialDriveMapper(double driveAxis, double turnAxis) {
@@ -41,6 +43,18 @@ void sendCMD() {
    // send the command
    manualDrive_pub.publish(cmd);
    // ROS_INFO("sending msg");
+
+   cross_pkg_messages::RoverComputerDriveCMD armCMD;
+   //set the CMD_L x y z to the last0MSG axes 0 1 2
+   armCMD.CMD_L.x = last0MSG.axes[0];
+   armCMD.CMD_L.y = last0MSG.axes[1];
+   armCMD.CMD_L.z = last0MSG.axes[2];
+   //set the CMD_R x y z to the last1MSG axes 0 1 2
+   armCMD.CMD_R.x = last1MSG.axes[0];
+   armCMD.CMD_R.y = last1MSG.axes[1];
+   armCMD.CMD_R.z = last1MSG.axes[2];
+
+   manualArm_pub.publish(armCMD);
 }
 
 int main(int argc, char** argv) {
@@ -55,6 +69,7 @@ int main(int argc, char** argv) {
    ROS_INFO("Joy Mapper is running");
    
    manualDrive_pub = n.advertise<cross_pkg_messages::ManualDriveCMD>("manualCommands", 10);
+   manualArm_pub = n.advertise<cross_pkg_messages::RoverComputerDriveCMD>("manualArmControl", 10);
 
    //register callbacks 
 

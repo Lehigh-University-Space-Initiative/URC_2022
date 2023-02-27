@@ -23,7 +23,7 @@ protected:
     const std::string placeholderIMGPath = "/home/urcAssets/LUSNoDownlink.png";
     // const std::string placeholderIMGPath = "/home/urcAssets/images.jpeg";
 
-    size_t currentCamIndex = 0;
+    size_t currentCamIndex = -1;
     size_t newCamIndex = 0;
     cv::Mat currentImage;
     ImageHelper* currentImageHolder = nullptr;

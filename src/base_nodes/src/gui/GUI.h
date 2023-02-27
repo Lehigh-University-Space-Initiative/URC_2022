@@ -18,4 +18,6 @@
 #include "cross_pkg_messages/RoverComputerDriveCMD.h"
 #include "sensor_msgs/Joy.h"
 #include "sensor_msgs/image_encodings.h"
+#include "sensor_msgs/CompressedImage.h"
+#include "theora_image_transport/Packet.h"
 #include <cv_bridge/cv_bridge.h>

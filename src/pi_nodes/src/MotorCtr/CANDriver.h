@@ -51,6 +51,11 @@ protected:
     static bool gpioSetup;
     static void setupGPIO();
 
+    //init to an invalid value
+    float lastSentValue = -10;
+
+    bool initialSetup = false;
+
 public:
     static void terminateGPIO();
 
