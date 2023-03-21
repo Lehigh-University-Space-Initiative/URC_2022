@@ -1,4 +1,5 @@
 <launch>
    <node pkg="jetson_nodes" name="DriveTrainManager" type="DriveTrainManager_node" output="screen" />
    <node pkg="jetson_nodes" name="VideoStreamer" type="VideoStreamer_node" output="screen" />
+   <node pkg="jetson_nodes" name="ArucoAdder" type="arucoAdder.py" output="screen" />
 </launch>

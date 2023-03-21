@@ -108,7 +108,8 @@ fi
 
 # hostsToUpdate=(1 0)
 
-for I in 1 0
+#TODO: add back pi:
+for I in 0 1
 do
     deployToHost ${I} "${cpyOnly}"
     if [ "${cpyOnly}" == "0" ]; then

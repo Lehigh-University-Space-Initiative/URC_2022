@@ -6,11 +6,14 @@
 
 class ImageHelper {
     cv::Mat image;
-    GLuint texture;
+    GLuint texture = 0;
 public:
     //image must be in RGBA
     ImageHelper(cv::Mat image);
     // ImageHelper();
+    ~ImageHelper();
+
+    void updateImage(cv::Mat image);
     
     void imguiDrawImage();
 };

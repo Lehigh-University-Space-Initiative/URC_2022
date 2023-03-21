@@ -25,5 +25,8 @@
     <node pkg="base_nodes" name="joy_mapper" type="JoyMapper_node" output="screen" />
 
     <!-- streaming mapping -->
-    <node name="republish" type="republish" pkg="image_transport" output="screen" args="theora in:=/videoStream raw out:=/videoStream/image_raw" />
+    <!-- <node name="republish" type="republish" pkg="image_transport" output="screen" args="theora in:=/videoStream raw out:=/videoStream/image_raw" /> -->
+
+    <node name="republish" type="republish" pkg="image_transport" output="screen" args="compressed in:=/videoStream raw out:=/videoStream/image_raw" />
+    <!-- <node name="republish" type="republish" pkg="image_transport" output="screen" args="compressed in:=/videoStreamAR raw out:=/videoStream/image_raw" /> -->
 </launch>

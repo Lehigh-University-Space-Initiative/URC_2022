@@ -34,7 +34,7 @@ void joy1Callback(const sensor_msgs::JoyConstPtr& msg) {
 void sendCMD() {
    if (!gotA0MSG || !gotA1MSG) return;
 
-   float sensitivity = 0.3f;
+   float sensitivity = 0.40f;
    cross_pkg_messages::ManualDriveCMD cmd;
    cmd.value.x = last0MSG.axes[1] * sensitivity;
    cmd.value.y = last1MSG.axes[1] * sensitivity;
@@ -46,12 +46,13 @@ void sendCMD() {
 
    cross_pkg_messages::RoverComputerDriveCMD armCMD;
    //set the CMD_L x y z to the last0MSG axes 0 1 2
-   armCMD.CMD_L.x = last0MSG.axes[0];
-   armCMD.CMD_L.y = last0MSG.axes[1];
+   //update, x is pitch, y = roll, z = yaw
+   armCMD.CMD_L.x = last0MSG.axes[1];
+   armCMD.CMD_L.y = last0MSG.axes[0];
    armCMD.CMD_L.z = last0MSG.axes[2];
    //set the CMD_R x y z to the last1MSG axes 0 1 2
-   armCMD.CMD_R.x = last1MSG.axes[0];
-   armCMD.CMD_R.y = last1MSG.axes[1];
+   armCMD.CMD_R.x = last1MSG.axes[1];
+   armCMD.CMD_R.y = last1MSG.axes[0];
    armCMD.CMD_R.z = last1MSG.axes[2];
 
    manualArm_pub.publish(armCMD);

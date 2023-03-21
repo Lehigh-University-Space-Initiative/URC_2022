@@ -42,6 +42,8 @@ int main(int argc, char** argv) {
 
    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+   ros::Rate sleepRate(120);
+
    while (n.ok() && !glfwWindowShouldClose(window)) {
       glfwPollEvents();
 
@@ -61,6 +63,8 @@ int main(int argc, char** argv) {
          pan->renderToScreen();
 
       renderFrame(window, clear_color);
+
+      sleepRate.sleep();
    }
    ROS_INFO("starting down gui");
 

@@ -1,4 +1,8 @@
 #include "StepperDriver.h"
+#include "iostream"
+
+// #define ROS_INFO()
+// #define ROS_WARN()
 
 void StepperDriver::setupGPIO()
 {
@@ -9,7 +13,7 @@ void StepperDriver::setupGPIO()
     
     //try to init gpio
     if (gpioInitialise() < 0) {
-        std::cout << "Failed to init gpio" << std::endl;
+        // std::cout << "Failed to init gpio" << std::endl;
         return;
     }
 
@@ -25,6 +29,8 @@ void StepperDriver::setupGPIO()
 
     //set the initial setup flag
     initialSetup = true;
+
+    std::cout << "initiolized" << std::endl;
 }
 
 void StepperDriver::step()
@@ -33,10 +39,12 @@ void StepperDriver::step()
     gpioWrite(stepPin, PI_HIGH);
 
     //wait 10 microseconds
-    gpioDelay(10);
+    gpioDelay(1000);
 
     //set the step pin low
     gpioWrite(stepPin, PI_LOW);
+
+    std::cout << "stepped for step pin: " << stepPin << std::endl;
 }
 
 void StepperDriver::runStepTick()
@@ -51,16 +59,15 @@ void StepperDriver::runStepTick()
     //get the time since the last step
     std::chrono::duration<float> timeSinceLastStep = currentTime - lastStepTime;
 
-    //if commanded velocity turn dir on, else turn dir off
-    if (commandedVelocity > 0) {
-        setDir(true);
-    } else if (commandedVelocity < 0) {
-        setDir(false);
-    }
+    
+    //convert from ms to s
+    auto timeDelta = timeSinceLastStep.count();
+    std::cout << "time since last step is " << timeDelta << std::endl;
 
     //detemine if a step should be taken
-    auto timeBetweenSteps = 1.0 / (abs(commandedVelocity) * stepsPerRev * gearRatio);
-    if (timeSinceLastStep.count() > timeBetweenSteps) {
+    auto timeBetweenSteps = 1.0 / (abs(commandedVelocity) * stepsPerRev / gearRatio);
+    std::cout << "time to step " << timeBetweenSteps << " vals for velocity, stepsPerRev and gear ratio " << commandedVelocity << " " << stepsPerRev << " " << gearRatio << std::endl;
+    if (timeDelta > timeBetweenSteps) {
         //take a step
         step();
 
@@ -72,6 +79,12 @@ void StepperDriver::runStepTick()
 StepperDriver::StepperDriver(int dirPin, int stepPin, int enablePin, float gearRatio, int stepsPerRev)
     : dirPin(dirPin), stepPin(stepPin), enablePin(enablePin), gearRatio(gearRatio), stepsPerRev(stepsPerRev) 
 {
+    setupGPIO();
+    auto now = std::chrono::system_clock::now();
+
+    lastCommandTime = now;
+    lastStepTime = now;
+    lastTickTime = now;
 }
 
 StepperDriver::~StepperDriver()
@@ -123,9 +136,16 @@ void StepperDriver::setVelocity(float velocity)
 
     commandedVelocity = velocity;
 
+    //if commanded velocity turn dir on, else turn dir off
+    if (commandedVelocity > 0) {
+        setDir(true);
+    } else if (commandedVelocity < 0) {
+        setDir(false);
+    }
+
     //if non zero velocity, and not enabled, print warning
-    if (velocity != 0 && !getEnable()) {
-        ROS_WARN("Setting velocity to non zero while not enabled");
+    if (velocity != 0 && getEnable()) {
+        // ROS_WARN("Setting velocity to non zero while not enabled");
     }
 }
 
@@ -136,9 +156,14 @@ float StepperDriver::getVelocity()
 
 void StepperDriver::tick()
 {
+    auto now = std::chrono::system_clock::now();
+    std::chrono::duration<float> timeSinceLastStep = now - lastTickTime;
+    // std::cout << "ticking with delta of " << timeSinceLastStep.count() << std::endl;
+
     //if the last command was more than 0.5 seconds ago, set velocity to 0
     if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCommandTime).count() > 500) {
-        commandedVelocity = 0;
+        // commandedVelocity = 0;
+        std::cout << "reseting vel" << std::endl;
     }
 
     //run the step tick
@@ -147,3 +172,6 @@ void StepperDriver::tick()
     //update the last tick time
     lastTickTime = std::chrono::system_clock::now();
 }
+
+
+// pasting of header:
