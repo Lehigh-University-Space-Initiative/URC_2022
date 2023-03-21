@@ -13,8 +13,9 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   cross_pkg_messages
   image_transport
+  cv_bridge
+  # JetsonGPIO
   )
-  #cv_bridge
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -120,6 +121,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
+  ../../vendor/jetsongpio/include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -225,6 +227,28 @@ add_dependencies(DriveTrainManager_node ${catkin_EXPORTED_TARGETS})
 
 # SET(OpenCV_DIR /installation/OpenCV-master/lib/cmake/opencv4)
 
-#add_executable(VideoStreamer_node src/VideoStreamer/VideoStreamerMain.cpp)
-#target_link_libraries(VideoStreamer_node ${catkin_LIBRARIES} opencv_core opencv_highgui opencv_video opencv_videoio)
-#add_dependencies(VideoStreamer_node ${catkin_EXPORTED_TARGETS})
+add_executable(VideoStreamer_node src/VideoStreamer/VideoStreamerMain.cpp)
+target_link_libraries(VideoStreamer_node ${catkin_LIBRARIES} opencv_core opencv_highgui opencv_video opencv_videoio opencv_objdetect opencv_features2d opencv_calib3d opencv_dnn opencv_flann opencv_gapi opencv_highgui opencv_imgcodecs opencv_imgproc opencv_photo opencv_stitching )
+add_dependencies(VideoStreamer_node ${catkin_EXPORTED_TARGETS})
+
+# catkin_install_python(PROGRAMS src/VideoStreamer/VideoStreamer2.py
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
+
+
+catkin_install_python(PROGRAMS src/VideoStreamer/arucoAdder.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+
+
+# find_package(JetsonGPIO REQUIRED)
+
+file(GLOB StatusLED_sources
+     "src/StatusLED/*.cpp"
+)
+
+add_executable(StatusLED_node ${StatusLED_sources})
+# target_link_libraries(StatusLED_node ${catkin_LIBRARIES} JetsonGPIO::JetsonGPIO)
+target_link_libraries(StatusLED_node ${catkin_LIBRARIES} )
+add_dependencies(StatusLED_node ${catkin_EXPORTED_TARGETS})

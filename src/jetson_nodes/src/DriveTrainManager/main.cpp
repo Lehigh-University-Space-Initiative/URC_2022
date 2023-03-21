@@ -50,6 +50,8 @@ int main(int argc, char** argv) {
    while (ros::ok()) {
       //proccsing
 
+      //TODO: add fialsafe to set zero power if LOS with base station in teliop
+
       //run loop
       ros::spinOnce();
       loop_rate.sleep();

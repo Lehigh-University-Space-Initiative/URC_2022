@@ -2,3 +2,6 @@
 	path = vendor/imgui2
 	url = https://github.com/ocornut/imgui
 	branch = docking
+[submodule "vendor/jetsongpio"]
+	path = vendor/jetsongpio
+	url = https://github.com/pjueon/JetsonGPIO.git

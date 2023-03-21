@@ -1,5 +1,6 @@
 #include "VideoViewPanel.h"
 
+
 void VideoViewPanel::drawBody()
 {
     for (size_t i = 0; i < cameras.size(); i++)
@@ -7,7 +8,7 @@ void VideoViewPanel::drawBody()
         auto cam = cameras[i];
         ImGui::SameLine();
 
-        static float b = 1.0f; //  test whatever color you need from imgui_demo.cpp e.g.
+        static float b = 0.8f;//1.0f; //  test whatever color you need from imgui_demo.cpp e.g.
         static float c = 0.5f; // 
         static int x = 2;
 
@@ -39,12 +40,17 @@ void VideoViewPanel::drawBody()
 void VideoViewPanel::setupSubscriber()
 {
     auto f = boost::function<void(const sensor_msgs::ImageConstPtr& msg)>([this](auto msg){
+    //    ROS_INFO("got frame");
        currentImage = cv_bridge::toCvShare(msg, "bgr8")->image;
-       lastFrameTime = std::chrono::system_clock::now();
-       showingLOS = false;
+       auto now = std::chrono::system_clock::now();
+       ROS_INFO(("Frame Delta: " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameTime).count())).c_str());
+       lastFrameTime = now;
+        showingLOS = false;
         setNewIMG(); 
     });
-    sub = n.subscribe("/videoStream/theora", 1, f);
+    ROS_INFO("setup vid sub");
+    // sub = n.subscribe("/videoStream/image_raw", 1, f);
+    sub = n.subscribe("/videoStreamAR", 1, f);
 }
 
 void VideoViewPanel::setNewIMG()
@@ -52,8 +58,11 @@ void VideoViewPanel::setNewIMG()
     cv::cvtColor(currentImage, currentImage, cv::COLOR_BGR2RGBA);
     cv::resize(currentImage, currentImage, cv::Size(960, 540));
     if (currentImageHolder)
+        // currentImageHolder->updateImage(currentImage);
         delete currentImageHolder;
-    currentImageHolder = new ImageHelper(currentImage);
+    // else {
+        currentImageHolder = new ImageHelper(currentImage);
+    // }
 }
 
 void VideoViewPanel::setLOSIMG()

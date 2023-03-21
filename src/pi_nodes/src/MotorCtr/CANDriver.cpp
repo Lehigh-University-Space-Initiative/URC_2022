@@ -176,12 +176,17 @@ bool PWMSparkMax::gpioSetup = false;
 
 void PWMSparkMax::setPower(float power)
 {
-    float limitPower = 0.4f;
+    float limitPower = 0.8f;
     float deadZone = 0.08f;
     //safety limet
     power = min(max(power, -limitPower),limitPower);
-
     // if (abs(power) < deadZone) {power = 0;}
+
+    if (power == lastSentValue) {
+        return;
+    }
+    lastSentValue = power;
+
 
     //reinit lib if needed
     if (gpioInitialise() < 0) {
@@ -194,9 +199,12 @@ void PWMSparkMax::setPower(float power)
 
     //set pwm frequency to 100Hz
     auto freq = 100;
-    gpioSetPWMfrequency(pin, freq);
     auto maxRange = 2000;
-    gpioSetPWMrange(pin, maxRange); 
+    gpioSetPWMrange(pin, maxRange);
+    if (!initialSetup) {
+        gpioSetPWMfrequency(pin, freq);
+        initialSetup = true;
+    }
 
     // calcualte duty cycle from power
     //remap [-1,1] of the power to [1000,2000] of the duty cycle
