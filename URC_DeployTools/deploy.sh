@@ -1,19 +1,39 @@
 #!/bin/bash
 
-#first host is jetson and second is pi
-hostNames=("192.168.1.3" "192.168.1.5")
-#use this if pi is on internet through ZeroTier vpn
-# hostNames=("192.168.1.3" "10.147.19.187")
-hostUsers=("jimmy" "pi")
-hostPwords=("lusi" "lusi")
-hostDeployDirs=("/home/jimmy/urc_deploy" "/home/pi/urc_deploy")
-hostPackages=("jetson_nodes" "pi_nodes")
+#DOCS:
+#this program will deploy the urc code to the rover computers
+#it will also run the initial catkin setup on the remote computers if needed
+#Parameters: -o0 will only deploy to the jetson
+#            -o1 will only deploy to the pi
+#            -cp will only copy the local files to the specified remote computers
+#               this param must be first if desired
+
+
+# ecoo "Script location: ${BASEDIR}"
+
+# #first host is jetson and second is pi
+# hostNames=("192.168.1.3" "192.168.1.5")
+# #use this if pi is on internet through ZeroTier vpn
+# # hostNames=("192.168.1.3" "10.147.19.187")
+# hostUsers=("jimmy" "pi")
+# hostPwords=("lusi" "lusi")
+# hostDeployDirs=("/home/jimmy/urc_deploy" "/home/pi/urc_deploy")
+# hostPackages=("jetson_nodes" "pi_nodes")
+
+#the above data is in a csv file now
+
+#set working directory to the directory of this script
+cd "$(dirname $0)"
+BASEDIR=$(pwd)
+
+source helpers/loadHosts.sh
+
+
 
 localDirsToCpy=("/src")
 
-# echo "Script executed from: ${PWD}"
-cd "$(dirname $0)"
-# ecoo "Script location: ${BASEDIR}"
+#restore pwd
+cd $BASEDIR
 
 initialRemoteSetup(){
     #only if the remote dir is empty, run initial catkin setup which includes:
@@ -108,11 +128,30 @@ fi
 
 # hostsToUpdate=(1 0)
 
-#TODO: add back pi:
-for I in 0 1
-do
-    deployToHost ${I} "${cpyOnly}"
+# TODO: add back pi:
+# for I in 0 1
+# do
+#     deployToHost ${I} "${cpyOnly}"
+#     if [ "${cpyOnly}" == "0" ]; then
+#         rebootHost ${I}
+#     fi
+# done
+
+source helpers/onlyFlagParse.sh
+
+if [ -n "$only_host" ]; then
+    echo "Deploying to host ${only_host}"
+    deployToHost ${only_host} "${cpyOnly}"
     if [ "${cpyOnly}" == "0" ]; then
-        rebootHost ${I}
+        rebootHost ${only_host}
     fi
-done
+else
+    for I in 0 1
+    do
+        echo "Deploying to host ${I}"
+        deployToHost ${I} "${cpyOnly}"
+        if [ "${cpyOnly}" == "0" ]; then
+            rebootHost ${I}
+        fi
+    done
+fi
