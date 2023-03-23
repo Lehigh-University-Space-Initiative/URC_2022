@@ -13,6 +13,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
+LIGHTCYAN='\033[1;36m'
 YELLOW='\033[0;33m'
 NOCOLOR='\033[0m' # No Color
 
@@ -112,6 +113,7 @@ sendDebugInfo() {
     #build the file
     debugInfoFile="${debugInfoHeader} \n ${debugInfoData}"
 
+    echo -e "sending debug info to ${hostNames[$1]}"
     #write the file to the remote host
     sshpass -p "${hostPwords[$1]}" ssh "${hostUsers[$1]}@${hostNames[$1]}" "echo -e '${debugInfoFile}' > ${hostDeployDirs[$1]}/debugInfo.csv"
 }
@@ -135,7 +137,7 @@ buildRemote(){
 deployToHost()
 {
     # index = $1
-    echo "Deploying to host ${hostNames[$1]}"
+    echo -e "${LIGHTCYAN}Deploying to host ${hostNames[$1]}${NOCOLOR}"
 
     #run the initialRemoteSetup function in the remote host
     code="$(typeset -f initialRemoteSetup); initialRemoteSetup "$1""
@@ -195,7 +197,7 @@ deployToHost()
             #if the modDate is newer than the nowDate, then the build was successful
             if [ "${modDate}" \> "${nowDate}" ]; then
                 buildSuccess=1
-                echo "${GREEN}Build Successful!${NOCOLOR}"
+                echo -e "${GREEN}Build Successful!${NOCOLOR}"
 
                 #send the debugInfo file to the remote host
                 sendDebugInfo $1
