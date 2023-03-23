@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#DOCS:
+#this program will update your netplan config file to either use the internet or the rover network
+#will ask for sudo password
+#Parameters: -int will switch to the internet
+#            default will switch to the rover network
 
 toInternet=0
 if [ "$1" == "-int" ]; then
