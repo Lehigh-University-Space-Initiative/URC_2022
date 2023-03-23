@@ -13,6 +13,7 @@ hostUsers=()
 hostPwords=()
 hostDeployDirs=()
 hostPackages=()
+hostEXENames=()
 
 # Loop through the lines and populate the arrays
 for line in "${lines[@]}"; do
@@ -22,6 +23,7 @@ for line in "${lines[@]}"; do
     hostPwords+=("${fields[2]}")
     hostDeployDirs+=("${fields[3]}")
     hostPackages+=("${fields[4]}")
+    hostEXENames+=("${fields[5]}")
 done
 
 export hostNames
@@ -29,3 +31,4 @@ export hostUsers
 export hostPwords
 export hostDeployDirs
 export hostPackages
+export hostEXENames

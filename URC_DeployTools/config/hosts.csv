@@ -1,3 +1,3 @@
-Hostname,Username,Password,DeployDirectory,Package
-192.168.1.3,jimmy,lusi,/home/jimmy/urc_deploy,jetson_nodes
-192.168.1.5,pi,lusi,/home/pi/urc_deploy,pi_nodes
+Hostname,Username,Password,DeployDirectory,Package,EXEName
+192.168.1.3,jimmy,lusi,/home/jimmy/urc_deploy,jetson_nodes,DriveTrainManager_node
+192.168.1.5,pi,lusi,/home/pi/urc_deploy,pi_nodes,MotorCtr_node
