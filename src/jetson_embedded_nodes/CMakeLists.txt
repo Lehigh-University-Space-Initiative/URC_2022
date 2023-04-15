@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(simulation)
+project(jetson_embedded_nodes)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,10 +8,12 @@ project(simulation)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  cross_pkg_messages
+  cv_bridge
+  image_transport
   roscpp
   rospy
   std_msgs
-  xacro
 )
 
 ## System dependencies are found with CMake's conventions
@@ -105,8 +107,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES simulation
-#  CATKIN_DEPENDS roscpp rospy std_msgs
+#  LIBRARIES jetson_embedded_nodes
+#  CATKIN_DEPENDS cross_pkg_messages cv_bridge image_transport roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -123,7 +125,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/simulation.cpp
+#   src/${PROJECT_NAME}/jetson_embedded_nodes.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -134,7 +136,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/simulation_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/jetson_embedded_nodes_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -198,7 +200,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_simulation.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_jetson_embedded_nodes.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -206,19 +208,24 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-# Xacro files
-file(GLOB xacro_files "descriptions/*.world.xacro")
+#VideoStreamer
 
-foreach(it ${xacro_files})
-  # remove .xacro extension
-  string(REGEX MATCH "(.*)[.]xacro$" unused ${it})
-  set(output_filename ${CMAKE_MATCH_1})
+# SET(OpenCV_DIR /installation/OpenCV-master/lib/cmake/opencv4)
 
-  # create a rule to generate ${output_filename} from {it}
-  xacro_add_xacro_file(${it} ${output_filename})
 
-  list(APPEND world_files ${output_filename})
-endforeach(it)
 
-# add an abstract target to actually trigger the builds
-add_custom_target(media_files ALL DEPENDS ${world_files})
+# catkin_install_python(PROGRAMS src/VideoStreamer/VideoStreamer2.py
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
+
+
+catkin_install_python(PROGRAMS src/VideoStreamer/arucoAdder.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+
+
+add_executable(VideoStreamer_node src/VideoStreamer/VideoStreamerMain.cpp)
+target_link_libraries(VideoStreamer_node ${catkin_LIBRARIES} opencv_core opencv_highgui opencv_video opencv_videoio opencv_objdetect opencv_features2d opencv_calib3d opencv_dnn opencv_flann opencv_gapi opencv_highgui opencv_imgcodecs opencv_imgproc opencv_photo opencv_stitching )
+add_dependencies(VideoStreamer_node ${catkin_EXPORTED_TARGETS})
+

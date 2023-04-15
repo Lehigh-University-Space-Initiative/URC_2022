@@ -223,22 +223,7 @@ add_dependencies(DriveTrainManager_node ${catkin_EXPORTED_TARGETS})
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-#VideoStreamer
 
-# SET(OpenCV_DIR /installation/OpenCV-master/lib/cmake/opencv4)
-
-add_executable(VideoStreamer_node src/VideoStreamer/VideoStreamerMain.cpp)
-target_link_libraries(VideoStreamer_node ${catkin_LIBRARIES} opencv_core opencv_highgui opencv_video opencv_videoio opencv_objdetect opencv_features2d opencv_calib3d opencv_dnn opencv_flann opencv_gapi opencv_highgui opencv_imgcodecs opencv_imgproc opencv_photo opencv_stitching )
-add_dependencies(VideoStreamer_node ${catkin_EXPORTED_TARGETS})
-
-# catkin_install_python(PROGRAMS src/VideoStreamer/VideoStreamer2.py
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-
-catkin_install_python(PROGRAMS src/VideoStreamer/arucoAdder.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
 
 
 

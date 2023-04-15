@@ -5,3 +5,9 @@
 [submodule "vendor/jetsongpio"]
 	path = vendor/jetsongpio
 	url = https://github.com/pjueon/JetsonGPIO.git
+[submodule "src/simulation/vendor/diff_drive_multiwheel"]
+	path = src/simulation/vendor/diff_drive_multiwheel
+	url = https://github.com/RamSrivatsav/gazebo_ros_diff_drive_multiwheel
+[submodule "vendor/diff_drive_multiwheel"]
+	path = vendor/diff_drive_multiwheel
+	url = https://github.com/RamSrivatsav/gazebo_ros_diff_drive_multiwheel
