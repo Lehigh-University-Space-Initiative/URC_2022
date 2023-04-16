@@ -86,6 +86,10 @@ sendDebugInfo() {
     #   - the git status
     #   - the git author (currnet computer owner) name and email
     
+    #MAKE AN EXAMPLE OF THE FILE
+    # Date and Time, Git Commit Hash, Git Commit Message, Git Branch, Git User Name, Git User Email
+    # 2020-02-20 20:20:20, 1234567890abcdef, "commit message", master, Jimmy,
+
     #get the git commit hash
     gitCommitHash=$(git rev-parse HEAD)
     #get the git commit message
