@@ -159,5 +159,4 @@ int main(int argc, char** argv) {
    // //dealloc
    // leftSide.setPower(0);
    // rightSide.setPower(0);
-   CANDriver::closeCAN();
 }

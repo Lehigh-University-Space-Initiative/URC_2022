@@ -1,6 +1,7 @@
 #include "CANDriver.h"
 #include "Utilities.h"
 #include <string>
+#include "Limits.h"
 
 #define MAX_PWM 2000
 #define MIN_PWM 1000
@@ -8,17 +9,22 @@
 #define MAX_DUTY_CYCLE 255
 #define MIN_DUTY_CYCLE 0
 
+std::array<CANDriver::CANStaticDataGuarded,2> CANDriver::canStaticData;
+std::array<libguarded::plain_guarded<size_t>,2> CANDriver::canStaticDataUsers;
 // std::array<can_frame,2> CANDriver::frame;
-std::array<ifreq, 2> CANDriver::ifr;
-std::array<sockaddr_can, 2> CANDriver::socketAddress;
-std::array<int,2> CANDriver::soc;
+// std::array<ifreq, 2> CANDriver::ifr;
+// std::array<sockaddr_can, 2> CANDriver::socketAddress;
+// std::array<int,2> CANDriver::soc;
 
-std::array<bool,2> CANDriver::canBussesSetup;
+// std::array<bool,2> CANDriver::canBussesSetup;
 
 bool CANDriver::setupCAN(int canBus)
 {
+    auto data = canStaticData[canBus].lock();
+
+
     //check if already setup 
-    if (canBussesSetup[canBus])
+    if (data->canBussesSetup)
         return true;
 
     //see waveshare can hat demo .cpp file
@@ -31,49 +37,55 @@ bool CANDriver::setupCAN(int canBus)
     system((sudoCMD + "sudo ifconfig can0 up").c_str());
 
     //1.Create socket
-    soc[canBus] = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-    if (soc[canBus] < 0) {
+    data->soc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+    
+    if (data->soc < 0) {
         ROS_ERROR("socket PF_CAN failed");
         return false;
     }
     
     //2.Specify can0 device
     if (canBus)
-        strcpy(ifr[canBus].ifr_name, "can1");
+        strcpy(data->ifr.ifr_name, "can1");
     else
-        strcpy(ifr[canBus].ifr_name, "can0");
+        strcpy(data->ifr.ifr_name, "can0");
 
-    int ret = ioctl(soc[canBus], SIOCGIFINDEX, &ifr);
+    int ret = ioctl(data->soc, SIOCGIFINDEX, &(data->ifr));
     if (ret < 0) {
         ROS_ERROR("ioctl failed");
         return false;
     }
     
     //3.Bind the socket to can0
-    socketAddress[canBus].can_family = AF_CAN;
-    socketAddress[canBus].can_ifindex = ifr[canBus].ifr_ifindex;
-    ret = bind(soc[canBus], (struct sockaddr *)&(socketAddress[canBus]), sizeof(socketAddress));
+    data->socketAddress.can_family = AF_CAN;
+    data->socketAddress.can_ifindex = data->ifr.ifr_ifindex;
+    ret = bind(data->soc, (struct sockaddr *)&(data->socketAddress), sizeof(data->socketAddress));
     if (ret < 0) {
         perror("bind failed");
         return false;
     }
     
     //4.Disable filtering rules, do not receive packets, only send
-    setsockopt(soc[canBus], SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+    setsockopt(data->soc, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
     //setup can correctly
 
-    canBussesSetup[canBus] = true;
+    data->canBussesSetup = true;
 
     return true;
 }
 
 bool CANDriver::sendMSG(int canBus, const can_frame& frame)
 {
-    if (!canBussesSetup[canBus]) return false;
+    if (canBus < 0 || canBus > 1) return false;
+
+    //Lock the data to get the socket
+    auto data = canStaticData[canBus].lock();
+
+    if (!data->canBussesSetup) return false;
 
     //TODO: validation
 
-    int nbytes = write(soc[canBus], &frame, sizeof(frame));  
+    int nbytes = write(data->soc, &frame, sizeof(frame));  
 
     if(nbytes != sizeof(frame)) {
         ROS_ERROR("CAN Frame Send Error!\r\n");
@@ -89,24 +101,45 @@ CANDriver::CANDriver(int busNum)
 
     if (setupCAN(busNum)) {
         ROS_INFO("can setup suc");
+        // incriments the number of can busses using this can bus
+        {
+            auto data = canStaticDataUsers[busNum].lock();
+            *data = *data + 1; 
+        }
     }
     else ROS_WARN("can not setup");
 }
 
-void CANDriver::closeCAN()
+
+void CANDriver::closeCAN(int canBus)
 {
-    close(soc[0]);
-    close(soc[1]);
+    if (canBus < 0 || canBus > 1) return;
 
-    system("sudo ifconfig can0 down");
-    system("sudo ifconfig can1 down");
+    auto data = canStaticData[canBus].lock();
 
-    canBussesSetup[0] = false;
-    canBussesSetup[1] = false;
+    if (!data->canBussesSetup) return;
+
+    close(data->soc);
+
+    if (canBus)
+        system("sudo ifconfig can1 down");
+    else
+        system("sudo ifconfig can0 down");
+    
+    data->canBussesSetup = false;
 }
 
 CANDriver::~CANDriver()
 {
+    //decriments the number of can busses using this can bus
+    {
+        auto data = canStaticDataUsers[canBus].lock();
+        *data = *data - 1; 
+
+        if (*data == 0) {
+            closeCAN(canBus);
+        }
+    }
 }
 
 
@@ -115,31 +148,45 @@ SparkMax::SparkMax(int canBUS, int canID)
 {
 }
 
+bool SparkMax::sendHeartbeat(int canBus)
+{
+    can_frame frame{};
+    frame.can_id = 0x02052C80 + canID; 
+    //data is all 1s
+    frame.can_dlc = 8;
+    for (int i = 0; i < 8; i++) {
+        frame.data[i] = 0xFF;
+    }
+
+    return sendMSG(canBus, frame);
+}
+
 void SparkMax::sendPowerCMD(float power)
 {
     //safety limet
-    power = min(max(power, -0.3f),0.3f);
+    power = min(max(power, -MAX_DRIVE_POWER), MAX_DRIVE_POWER);
+
+    //deadband
+    if (abs(power) < DRIVE_DEADBAND) {
+        power = 0;
+    }
 
     can_frame frame{}; 
-    frame.can_id = 2050080 + canID;
-    ROS_INFO(("sending can frame with id " + std::to_string(frame.can_id)).c_str());
-    frame.can_dlc = 8;
+    frame.can_id = 0x2050080 + canID;
+    frame.can_dlc = 6;
     memcpy(frame.data,(int*)(&power), sizeof(float));
-    auto temp = frame.data[0];
-    frame.data[0] = frame.data[3];
-    frame.data[3] = temp;
-
-    temp = frame.data[1];
-    frame.data[1] = frame.data[2];
-    frame.data[2] = temp;
-
-    ROS_INFO(("sending: " + std::to_string(power) + " which is " + std::to_string(frame.data[0]) + std::to_string(frame.data[1]) + std::to_string(frame.data[2]) + std::to_string(frame.data[3])).c_str());
+    //last 2 bytes are 0
+    frame.data[4] = 0;
+    frame.data[5] = 0;
+    
+    // ROS_INFO(("sending: " + std::to_string(power) + " which is " + std::to_string(frame.data[0]) + std::to_string(frame.data[1]) + std::to_string(frame.data[2]) + std::to_string(frame.data[3])).c_str());
 
 
     if (sendMSG(canBus, frame)) {
-        ROS_INFO("Sent can message");
+        // ROS_INFO("Sent can message");
+        return;
     }
-    else ROS_WARN("Can message failed to send");
+    else ROS_WARN("Can Spark MAX Speed message failed to send");
 }
 
 void PWMSparkMax::setupGPIO()
