@@ -148,7 +148,7 @@ SparkMax::SparkMax(int canBUS, int canID)
 {
 }
 
-bool SparkMax::sendHeartbeat(int canBus)
+bool SparkMax::sendHeartbeat()
 {
     can_frame frame{};
     frame.can_id = 0x02052C80 + canID; 
@@ -187,6 +187,18 @@ void SparkMax::sendPowerCMD(float power)
         return;
     }
     else ROS_WARN("Can Spark MAX Speed message failed to send");
+}
+
+void SparkMax::ident()
+{
+    can_frame frame{}; 
+    frame.can_id = 0x2051D80 + canID;
+    frame.can_dlc = 0;
+
+    if (sendMSG(canBus, frame)) {
+        // ROS_INFO("Sent can message");
+        return;
+    }
 }
 
 void PWMSparkMax::setupGPIO()

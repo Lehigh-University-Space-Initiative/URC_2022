@@ -1,3 +1,4 @@
+#pragma once
 #include "ros/ros.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,9 +59,10 @@ protected:
 public:
     SparkMax(int canBUS, int canID);
 
-    bool sendHeartbeat(int canBus);
+    bool sendHeartbeat();
 
     void sendPowerCMD(float power);
+    void ident();
 };
 
 class PWMSparkMax {

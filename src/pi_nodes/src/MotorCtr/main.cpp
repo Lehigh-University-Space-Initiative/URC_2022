@@ -9,16 +9,17 @@
 #include "geometry_msgs/Vector3.h"
 #include "CANDriver.h"
 #include "StepperDriver.h"
+#include "DriveTrainMotorManager.h"
 
 //0 = drivetrain wiring and control, 1 = robotic arm wiring and control
 #define WIRING_CONFIG 0 
 
 #if !WIRING_CONFIG
 //drive motors
-PWMSparkMax leftSide(18);
-PWMSparkMax rightSide(19);
-// PWMSparkMax rightSide2(13);
-// PWMSparkMax rightSide3(19);
+// PWMSparkMax leftSide(18);
+// PWMSparkMax rightSide(19);
+// // PWMSparkMax rightSide2(13);
+// // PWMSparkMax rightSide3(19);
 #else
 //4 stepper motors
 /* table of motor pins
@@ -32,13 +33,13 @@ PWMSparkMax rightSide(19);
 5			End effector Rot Dir
 6			End effector Rot Step
 */
-constexpr int enable = 17;
-//gear ratio is number of turns of elment per turns of motor
-StepperDriver BaseRot(27,23,enable,1/3.0,200);
-StepperDriver ElbowPitch(24,25,enable,1/50.0,200);
-StepperDriver ElbowRotate(16,26,enable,1/15.0,200);
-StepperDriver EndEffectorRot(5,6,enable,1/27.0,200);
-PWMSparkMax EndEffector(19);
+// constexpr int enable = 17;
+// //gear ratio is number of turns of elment per turns of motor
+// StepperDriver BaseRot(27,23,enable,1/3.0,200);
+// StepperDriver ElbowPitch(24,25,enable,1/50.0,200);
+// StepperDriver ElbowRotate(16,26,enable,1/15.0,200);
+// StepperDriver EndEffectorRot(5,6,enable,1/27.0,200);
+// PWMSparkMax EndEffector(19);
 
 
 //arm motors
@@ -46,14 +47,7 @@ PWMSparkMax EndEffector(19);
 
 #endif
 
-void gotCommands(const cross_pkg_messages::RoverComputerDriveCMD& msg) {
-#if !WIRING_CONFIG
-   ROS_INFO(("setting power to " + std::to_string(msg.CMD_L.x)).c_str());
-   ROS_INFO(("setting power to " + std::to_string(msg.CMD_R.x)).c_str());
-   leftSide.setPower(msg.CMD_L.x);
-   rightSide.setPower(-msg.CMD_R.x);
-#endif
-}
+
 
 //same msg (but should be manual arm control) but different interpretation
 void gotArmCommands(const cross_pkg_messages::RoverComputerDriveCMD& msg) {
@@ -108,10 +102,12 @@ int main(int argc, char** argv) {
 
    ros::NodeHandle n;
 
-   ros::Subscriber sub = n.subscribe("roverDriveCommands", 1000, gotCommands);
-   ros::Subscriber sub2 = n.subscribe("/manualArmControl", 1000, gotArmCommands);
+   // ros::Subscriber sub = n.subscribe("roverDriveCommands", 1000, gotCommands);
+   // ros::Subscriber sub2 = n.subscribe("/manualArmControl", 1000, gotArmCommands);
 
    ROS_INFO("Motor CTR startup");
+
+   DriveTrainMotorManager driveTrain{};
 
    //TODO: ennable steppers
    // BaseRot.setEnable(true);
@@ -155,6 +151,7 @@ int main(int argc, char** argv) {
       ros::spinOnce();
       loop_rate.sleep();
    }
+   
 
    // //dealloc
    // leftSide.setPower(0);
