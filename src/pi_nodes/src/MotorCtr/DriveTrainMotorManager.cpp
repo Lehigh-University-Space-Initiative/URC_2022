@@ -25,6 +25,7 @@ void DriveTrainMotorManager::setupMotors()
 
    //Testing numbers
    motors.push_back(SparkMax(0,15));
+   ROS_DEBUG("Identifying motor 0");
    motors[0].ident();
 }
 
