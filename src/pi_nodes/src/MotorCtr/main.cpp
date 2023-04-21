@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
    // ros::Subscriber sub = n.subscribe("roverDriveCommands", 1000, gotCommands);
    // ros::Subscriber sub2 = n.subscribe("/manualArmControl", 1000, gotArmCommands);
 
-   ROS_INFO("Motor CTR startup");
+   ROS_INFO("Motor CTR startupp");
 
    DriveTrainMotorManager driveTrain{};
 

@@ -58,9 +58,9 @@ void DriveTrainMotorManager::setupMotors()
 // //     motors.push_back(SparkMax(0,15));
 // //     ROS_INFO("Identifying motor 0");
 // //     motors[0].ident();
-// //     ROS_ERROR("TEST ERR");
-//     for (auto& motor: motors)
-//         motor.ident();
+    ROS_ERROR("TEST ERR");
+    for (auto& motor: motors)
+        motor.ident();
 }
 
 void DriveTrainMotorManager::sendHeartbeats()
