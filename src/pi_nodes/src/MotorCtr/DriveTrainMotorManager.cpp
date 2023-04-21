@@ -65,9 +65,9 @@ void DriveTrainMotorManager::setupMotors()
 
 void DriveTrainMotorManager::sendHeartbeats()
 {
-    // for (auto& motor : motors) {
-        // motor.sendHeartbeat();
-    // }
+    for (auto& motor : motors) {
+        motor.sendHeartbeat();
+    }
 }
 
 void DriveTrainMotorManager::heartbeatThread()
@@ -103,13 +103,13 @@ void DriveTrainMotorManager::parseDriveCommands(const cross_pkg_messages::RoverC
     //     motor.sendPowerCMD(msg->CMD_L.x);
     // }
 
-    // motors[0].sendPowerCMD(msg->CMD_L.x);
-    // motors[1].sendPowerCMD(msg->CMD_L.y);
-    // motors[2].sendPowerCMD(msg->CMD_L.z);
-    //
-    // motors[3].sendPowerCMD(msg->CMD_R.x);
-    // motors[4].sendPowerCMD(msg->CMD_R.y);
-    // motors[5].sendPowerCMD(msg->CMD_R.z);
+    motors[0].sendPowerCMD(msg->CMD_L.x);
+    motors[1].sendPowerCMD(msg->CMD_L.y);
+    motors[2].sendPowerCMD(msg->CMD_L.z);
+
+    motors[3].sendPowerCMD(msg->CMD_R.x);
+    motors[4].sendPowerCMD(msg->CMD_R.y);
+    motors[5].sendPowerCMD(msg->CMD_R.z);
 }
 
 DriveTrainMotorManager::DriveTrainMotorManager()
