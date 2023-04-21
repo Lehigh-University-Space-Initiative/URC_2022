@@ -47,6 +47,8 @@ int main(int argc, char** argv) {
    while (n.ok() && !glfwWindowShouldClose(window)) {
       glfwPollEvents();
 
+
+
       //ros updates
       ros::spinOnce();
       for (auto pan : uiPanels)

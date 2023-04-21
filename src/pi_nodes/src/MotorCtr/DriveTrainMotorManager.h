@@ -1,7 +1,10 @@
-#pragma once
+// #pragma once
+
+#ifndef DriveTrainMotorManager_FILE
+#define DriveTrainMotorManager_FILE
 
 #include "CANDriver.h"
-#include "Utilities.h"
+// #include "Utilities.h"
 #include "ros/ros.h"
 
 #include <cs_plain_guarded.h>
@@ -31,3 +34,4 @@ public:
     DriveTrainMotorManager();
     virtual ~DriveTrainMotorManager();
 };
+#endif

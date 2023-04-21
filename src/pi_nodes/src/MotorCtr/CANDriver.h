@@ -1,4 +1,6 @@
-#pragma once
+
+#ifndef CANDriver_FILE
+#define CANdriver_FILE
 #include "ros/ros.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,7 +46,7 @@ protected:
     static bool setupCAN(int canBus);
     static void closeCAN(int canBus);
 
-    static bool sendMSG(int canBus, const can_frame& frame);
+    static bool sendMSG(int canBus, can_frame frame);
 
 public:
     CANDriver(int busNum);
@@ -86,3 +88,4 @@ public:
 
     void setPower(float power);
 };
+#endif

@@ -33,8 +33,16 @@ bool CANDriver::setupCAN(int canBus)
 
     std::string sudoCMD = "echo lusi | sudo -S ";
 
-    system((sudoCMD + "ip link set can0 type can bitrate 100000").c_str());
-    system((sudoCMD + "sudo ifconfig can0 up").c_str());
+    //CAN setup is now done at atartup of computer in a script
+    // if (canBus)
+    //     system((sudoCMD + "ip link set can1 type can bitrate 100000").c_str());
+    // else
+    //     system((sudoCMD + "ip link set can0 type can bitrate 100000").c_str());
+
+    // if (canBus)
+    //     system((sudoCMD + "sudo ifconfig can1 up").c_str());
+    // else
+    //     system((sudoCMD + "sudo ifconfig can0 up").c_str());
 
     //1.Create socket
     data->soc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
@@ -74,16 +82,19 @@ bool CANDriver::setupCAN(int canBus)
     return true;
 }
 
-bool CANDriver::sendMSG(int canBus, const can_frame& frame)
+bool CANDriver::sendMSG(int canBus, can_frame frame)
 {
     if (canBus < 0 || canBus > 1) return false;
 
     //Lock the data to get the socket
     auto data = canStaticData[canBus].lock();
 
-    if (!data->canBussesSetup) return false;
+    // if (!data->canBussesSetup) return false;
 
     //TODO: validation
+
+    //set the extended frame flag so caller does not have to
+    frame.can_id |= CAN_EFF_FLAG;
 
     int nbytes = write(data->soc, &frame, sizeof(frame));  
 
@@ -102,10 +113,10 @@ CANDriver::CANDriver(int busNum)
     if (setupCAN(busNum)) {
         ROS_INFO("can setup suc");
         // incriments the number of can busses using this can bus
-        {
-            auto data = canStaticDataUsers[busNum].lock();
-            *data = *data + 1; 
-        }
+        // {
+        //     auto data = canStaticDataUsers[busNum].lock();
+        //     *data = *data + 1; 
+        // }
     }
     else ROS_WARN("can not setup");
 }
@@ -121,10 +132,10 @@ void CANDriver::closeCAN(int canBus)
 
     close(data->soc);
 
-    if (canBus)
-        system("sudo ifconfig can1 down");
-    else
-        system("sudo ifconfig can0 down");
+    // if (canBus)
+    //     system("sudo ifconfig can1 down");
+    // else
+    //     system("sudo ifconfig can0 down");
     
     data->canBussesSetup = false;
 }
@@ -137,6 +148,7 @@ CANDriver::~CANDriver()
         *data = *data - 1; 
 
         if (*data == 0) {
+            ROS_DEBUG("Shutting down canbus");
             closeCAN(canBus);
         }
     }
@@ -194,6 +206,9 @@ void SparkMax::ident()
     can_frame frame{}; 
     frame.can_id = 0x2051D80 + canID;
     frame.can_dlc = 0;
+    
+    //Print out can_id in hexidecimal
+    ROS_INFO("Sending ident message to can id: %x", frame.can_id);
 
     if (sendMSG(canBus, frame)) {
         // ROS_INFO("Sent can message");
