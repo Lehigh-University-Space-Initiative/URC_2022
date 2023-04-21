@@ -1,6 +1,6 @@
 
 #ifndef CANDriver_FILE
-#define CANdriver_FILE
+#define CANDriver_FILE
 #include "ros/ros.h"
 #include <stdio.h>
 #include <stdlib.h>

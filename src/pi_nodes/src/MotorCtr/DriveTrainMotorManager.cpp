@@ -1,7 +1,7 @@
 // #pragma once
 
 
-// #include "CANDriver.h"
+#include "CANDriver.h"
 #include "Utilities.h"
 #include "ros/ros.h"
 
@@ -65,9 +65,9 @@ void DriveTrainMotorManager::setupMotors()
 
 void DriveTrainMotorManager::sendHeartbeats()
 {
-    for (auto& motor : motors) {
-        motor.sendHeartbeat();
-    }
+    // for (auto& motor : motors) {
+        // motor.sendHeartbeat();
+    // }
 }
 
 void DriveTrainMotorManager::heartbeatThread()
