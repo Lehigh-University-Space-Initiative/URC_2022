@@ -1,7 +1,16 @@
 <launch>
+  <!-- Load the urdf into the parameter server. -->
+  <param name="my_robot_description" textfile="$(find simulation)/descriptions/rover.world"/>
+   
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" >
+      <remap from="robot_description" to="my_robot_description" />
+      <!-- <remap from="joint_states" to="different_joint_states" /> -->
+  </node>
+
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="baseScene.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+    <!-- <arg name="world_name" value="$(find simulation)/descriptions/rover.world"/> Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+    <!-- <arg name="world_name" value="worlds/mud.world"/>  -->
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>

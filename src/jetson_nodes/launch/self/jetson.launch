@@ -1,4 +1,7 @@
 <launch>
+   <arg name="singleComputer" default="false" />
    <!-- <node pkg="jetson_nodes" name="DriveTrainManager" type="DriveTrainManager_node" output="screen" /> -->
-   <include file="$(find jetson_nodes)/launch/self/_internal_jetson.launch" />
+   <include file="$(find jetson_nodes)/launch/self/_internal_jetson.launch" >
+      <arg name="singleComputer" value="$(arg singleComputer)" />
+   </include>
 </launch>
