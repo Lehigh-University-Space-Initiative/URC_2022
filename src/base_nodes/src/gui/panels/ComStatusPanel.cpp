@@ -1,4 +1,5 @@
 #include "ComStatusPanel.h"
+#include <ros/ros.h>
 
 void ComStatusPanel::drawBody()
 {
@@ -13,6 +14,39 @@ void ComStatusPanel::drawBody()
         ImGui::Text(conString(i).c_str());
         ImGui::PopStyleColor();
     }
+
+
+        //create some blank space without the seperator
+
+    ImGui::Separator();
+    ImGui::Text("\n\n\n\nROS Nodes");
+
+    //wrap to be scrollable
+    ImGui::BeginChild("scrolling", ImVec2(0, 100), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+    std::vector<std::string> activeNodes;
+    ros::master::getNodes(activeNodes);
+
+
+    if (activeNodes.size() == 0)
+    {
+        ImGui::Separator();
+        ImGui::Text("No active ROS nodes / Unable to communicate with ROS master");
+    }
+
+    if (activeNodes.size() > 0)
+    {
+        for(size_t i = 0; i < activeNodes.size(); i++)
+        {
+            ImGui::Separator();
+            ///concolor for ros nodes
+            ImGui::PushStyleColor(ImGuiCol_Text,IM_COL32(0,255,0,255));
+            ImGui::Text(activeNodes[i].c_str());
+            ImGui::PopStyleColor();
+        }
+    }
+
+    ImGui::EndChild();
     
 }
 
@@ -37,14 +71,13 @@ std::string ComStatusPanel::conString(size_t hostIndex)
 }
 
 ImU32 ComStatusPanel::conColor(size_t hostIndex)
-{
+{   
     auto lastHeard = std::chrono::system_clock::now() - hosts[hostIndex]->getLastContact();
     if (lastHeard >= connectionDur) {
         return IM_COL32(245,61,5,255);
     }else {
         return IM_COL32(0,255,0,255);
     }
-    
 }
 
 void ComStatusPanel::setup()

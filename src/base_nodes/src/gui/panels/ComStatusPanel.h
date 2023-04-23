@@ -4,6 +4,8 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
+#include <std_msgs/String.h>
+#include <ros/ros.h>
 
 class ComStatusChecker {
 
