@@ -1,0 +1,5 @@
+Date and Time, Git Commit Hash, Git Commit Message, Git Branch, Git User Name, Git User Email
+2022-04-19 09:30:00, 0123456789abcdef, Commit message 1, branch-1, User1, user1@example.com
+2022-04-19 09:31:00, fedcba9876543210, Commit message 2, branch-2, User2, user2@example.com
+2022-04-19 09:32:00, 0123456789abcdef, Commit message 3, branch-1, User1, user1@example.com
+2022-04-19 09:33:00, fedcba9876543210, Commit message 4, branch-2, User2, user2@example.com

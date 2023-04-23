@@ -54,7 +54,7 @@ void SoftwareDebugPanel::update()
 {
     double currentTime = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::system_clock::now().time_since_epoch()).count();
     if (currentTime - lastUpdateTime > refreshInterval) {
-        readDebugInfoFile("/home/odroid/.ros/debug_info.txt");
+        readDebugInfoFile("debugInfo.txt");
         lastUpdateTime = currentTime;
     }
 }
