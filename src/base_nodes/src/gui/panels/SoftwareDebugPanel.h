@@ -13,15 +13,23 @@ public:
     virtual void setup() override;
     virtual void update() override;
 
+    // Host struct
+    struct Host {
+        std::string hostIpAddress;
+        std::string hostName;
+        std::string debugFilePath;
+    };
+
 private:
     std::vector<std::string> debugInfoLines;
+    std::vector<Host> hosts;
     // struct with 3 properties: ip address, host name, path to debug file
-    // array of the struct called host define each computer
-    // IN INIT METHOD populate all that
+    // array of the struct called host which defines each computer
+    // in the setup() method will populate all that
     std::chrono::system_clock::time_point lastUpdateTime = std::chrono::system_clock::now();
     const std::chrono::milliseconds refreshInterval = std::chrono::milliseconds(500);
 
     std::chrono::system_clock::time_point lastFileReadTime = std::chrono::system_clock::now();
 
-    void readDebugInfoFile(const std::string& filePath);
+    void readDebugInfoFile(const Host& host);
 };
