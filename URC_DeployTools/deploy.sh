@@ -128,6 +128,15 @@ buildRemote(){
     source devel/setup.bash
     # source devel_cb/setup.bash
     
+    # make the launch script executable (if there is one)
+
+    # check if it exists (src/$2/launch/localStartCMD.bash)
+    if [ -f "src/$2/launch/localStartCMD.bash" ]; then 
+        echo -e "${CYAN}Making launch script executable${NOCLOR}"
+        chmod +x "src/$2/launch/localStartCMD.bash" 
+    else
+        echo -e "${LIGHTCYAN}No launch script found ${NOCLOR}"
+    fi
 
     # echo "$2 is the package, $1 is the machine"
     catkin build $2
@@ -276,7 +285,7 @@ else
         built=$?
 
         if [ "${buildSuccess}" == "1" ]; then
-            if [ "${reboot}" == "0" ]; then
+            if [ "${reboot}" == "1" ]; then
                 rebootHost $i
             fi
         fi

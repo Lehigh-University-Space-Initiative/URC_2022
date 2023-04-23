@@ -214,6 +214,7 @@ file(GLOB MotorCtr_src
 
 
 add_executable(MotorCtr_node ${MotorCtr_src})
+include_directories(MotorCtr_node ${catkin_INCLUDE_DIRS} include/cs_libguarded)
 target_link_libraries(MotorCtr_node ${catkin_LIBRARIES} pigpio)
 add_dependencies(MotorCtr_node ${catkin_EXPORTED_TARGETS})
 

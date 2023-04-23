@@ -8,6 +8,8 @@
 
 // #include "cs_libguarded/cs_libguarded.h"
 
+#define TESTING_MODE 0
+
 ros::Publisher manualDrive_pub;
 ros::Publisher manualArm_pub;
 
@@ -34,10 +36,23 @@ void joy1Callback(const sensor_msgs::JoyConstPtr& msg) {
 void sendCMD() {
    if (!gotA0MSG || !gotA1MSG) return;
 
-   float sensitivity = 0.40f;
+   float sensitivity = 0.3f;//0.40f;
    cross_pkg_messages::ManualDriveCMD cmd;
+   #if TESTING_MODE
+   //test in a sin wive for x and cos wave for y
+   float mag = 0.4f;
+   float period = 10.0f;
+
+   // cmd.value.x = 0.4f;
+   // cmd.value.y = 0.4f;
+   cmd.value.x = mag * sin(ros::Time::now().toSec() * 2.0f * M_PI / period);
+   cmd.value.y = mag * cos(ros::Time::now().toSec() * 2.0f * M_PI / period);
+
+   #else
    cmd.value.x = last0MSG.axes[1] * sensitivity;
-   cmd.value.y = last1MSG.axes[1] * sensitivity;
+   //temp inverting before fixing motroctr
+   cmd.value.y = last1MSG.axes[1] * -sensitivity;
+   #endif
    cmd.value.z = 0; // this is ignored
 
    // send the command
