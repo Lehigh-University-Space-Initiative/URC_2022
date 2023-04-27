@@ -20,11 +20,10 @@ public:
         std::string debugFilePath;
         std::string user;
         std::string password;
-        std::vector<std::string> debugInfoLines;
+        std::string debugInfoLines;
     };
 
 private:
-    std::vector<std::string> debugInfoLines;
     std::vector<Host> hosts;
     // struct with 3 properties: ip address, host name, path to debug file
     // array of the struct called host which defines each computer
@@ -34,5 +33,5 @@ private:
 
     std::chrono::system_clock::time_point lastFileReadTime = std::chrono::system_clock::now();
 
-    void readDebugInfoFile(const Host& host);
+    void readDebugInfoFile(Host& host);
 };

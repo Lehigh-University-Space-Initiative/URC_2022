@@ -49,22 +49,22 @@ void SoftwareDebugPanel::drawBody()
         ImGui::NextColumn();
 
         // Display datetime, with elapsed time since first file read
-        for (const auto& line : debugInfoLines) {
-            std::istringstream iss(line);
-            std::string dateTime, branch, userName;
-            std::string gitCommitHash, gitCommitMessage; // don't need these
-            std::getline(iss, dateTime, ',');
-            std::getline(iss, gitCommitHash, ',');
-            std::getline(iss, gitCommitMessage, ',');
-            std::getline(iss, branch, ',');
-            std::getline(iss, userName, ',');
-            ImGui::Text("%s (%fs)", dateTime.c_str(), timeElapsed.count());
-            ImGui::NextColumn();
-            ImGui::Text("%s", branch.c_str());
-            ImGui::NextColumn();
-            ImGui::Text("%s", userName.c_str());
-            ImGui::NextColumn();
-        }
+        std::string line = host.debugInfoLines;
+        std::istringstream iss(line);
+        std::string dateTime, branch, userName;
+        std::string gitCommitHash, gitCommitMessage; // don't need these
+        std::getline(iss, dateTime, ',');
+        std::getline(iss, gitCommitHash, ',');
+        std::getline(iss, gitCommitMessage, ',');
+        std::getline(iss, branch, ',');
+        std::getline(iss, userName, ',');
+        ImGui::Text("%s (%fs)", dateTime.c_str(), timeElapsed.count());
+        ImGui::NextColumn();
+        ImGui::Text("%s", branch.c_str());
+        ImGui::NextColumn();
+        ImGui::Text("%s", userName.c_str());
+        ImGui::NextColumn();
+
         // Separator between hosts
         ImGui::Separator();
     }
@@ -75,9 +75,9 @@ void SoftwareDebugPanel::setup()
 {
     // Populate hosts array
     hosts = {
-        {"192.168.0.1", "Host 1", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi", {}},
-        {"192.168.0.2", "Host 2", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi", {}},
-        {"192.168.0.3", "Host 3", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi", {}}
+        {"192.168.0.1", "Host 1", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi", ""},
+        {"192.168.0.2", "Host 2", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi", ""},
+        {"192.168.0.3", "Host 3", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi", ""}
     };
 }
 
@@ -95,13 +95,14 @@ void SoftwareDebugPanel::update()
 
 // Command: sshpass -p lusi ssh -o ConnectTimeout=2 pi@192.168.0.1 cat /home/pi/urc_deploy/debugInfo.csv
 // Command: sshpass -p {pass} ssh -o ConnectTimeout=2 {user}@{ip} cat {path}
-void SoftwareDebugPanel::readDebugInfoFile(const Host& host)
+void SoftwareDebugPanel::readDebugInfoFile(Host& host)
 {
     std::string cmd = "sshpass -p " + host.password + " ssh -o ConnectTimeout=2 " + host.user + "@" + host.hostIpAddress + " cat " + host.debugFilePath;
     ROS_INFO("Executing command: %s", cmd.c_str());
     std::string result = exec(cmd.c_str());
 
     std::size_t found = result.find_last_of("/\\");
-    host.debugInfoLines.push_back(result.substr(found+1));
+    std::string line = result.substr(found+1);
+    host.debugInfoLines = line;
     ROS_INFO("Read the last line from debug info file for host %s (%s)", host.hostName.c_str(), host.hostIpAddress.c_str());
 }
