@@ -18,6 +18,9 @@ public:
         std::string hostIpAddress;
         std::string hostName;
         std::string debugFilePath;
+        std::string user;
+        std::string password;
+        std::vector<std::string> debugInfoLines;
     };
 
 private:
