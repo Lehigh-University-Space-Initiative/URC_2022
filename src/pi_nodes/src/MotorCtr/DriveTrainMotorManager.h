@@ -18,6 +18,10 @@ private:
     std::vector<SparkMax> motors;
 
     void setupMotors();
+    void stopAllMotors();
+
+    libguarded::plain_guarded<std::chrono::time_point<std::chrono::system_clock>> lastManualCommandTime{std::chrono::system_clock::now()};
+    std::chrono::milliseconds manualCommandTimeout{1500};
 
     libguarded::plain_guarded<bool> sendHeartbeatsFlag{true};
     libguarded::plain_guarded<bool> heartbeatThreadShutDown{false};

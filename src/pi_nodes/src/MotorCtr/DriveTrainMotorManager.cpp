@@ -24,6 +24,13 @@ void DriveTrainMotorManager::setupMotors()
         motor.ident();
 }
 
+void DriveTrainMotorManager::stopAllMotors()
+{
+    for (auto& motor : motors) {
+        motor.sendPowerCMD(0);
+    }
+}
+
 void DriveTrainMotorManager::sendHeartbeats()
 {
     for (auto& motor : motors) {
@@ -51,6 +58,17 @@ void DriveTrainMotorManager::heartbeatThread()
                 sendHeartbeats();
             }
         }
+        
+        //LOS Safety Stop
+        {
+            auto lock = lastManualCommandTime.lock();
+            auto now = std::chrono::system_clock::now();
+            if (now - *lock > manualCommandTimeout) {
+                ROS_WARN("LOS Safety Stop");
+                stopAllMotors();
+            }
+        }
+
         loop_rate.sleep();
     }
 }
@@ -81,6 +99,10 @@ DriveTrainMotorManager::DriveTrainMotorManager()
     heartbeatThreadObj = std::thread(&DriveTrainMotorManager::heartbeatThread, this);   
 
     auto calback = boost::function<void(const cross_pkg_messages::RoverComputerDriveCMDConstPtr&)>([this](auto p){
+        {
+            auto lock = lastManualCommandTime.lock();
+            *lock = std::chrono::system_clock::now();
+        }
         parseDriveCommands(p);
     });
 
