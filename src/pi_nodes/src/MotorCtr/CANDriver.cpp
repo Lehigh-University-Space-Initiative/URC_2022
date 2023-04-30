@@ -176,7 +176,7 @@ bool SparkMax::sendHeartbeat()
 void SparkMax::sendPowerCMD(float power)
 {
     //safety limet
-    power = min(max(power, -MAX_DRIVE_POWER), MAX_DRIVE_POWER);
+    power = std::min(std::max(power, -MAX_DRIVE_POWER), MAX_DRIVE_POWER);
 
     //deadband
     if (abs(power) < DRIVE_DEADBAND) {
@@ -253,7 +253,7 @@ void PWMSparkMax::setPower(float power)
     float limitPower = 0.8f;
     float deadZone = 0.08f;
     //safety limet
-    power = min(max(power, -limitPower),limitPower);
+    power = std::min(std::max(power, -limitPower),limitPower);
     // if (abs(power) < deadZone) {power = 0;}
 
     if (power == lastSentValue) {
