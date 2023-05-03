@@ -65,7 +65,8 @@ void SoftwareDebugPanel::drawBody()
             ImGui::TextColored(ImVec4(1,0,0,1), "Not connected");
         } else {
             std::string timeString = timePointAsString(host.time_point);
-            ImGui::Text("%s (%f)", timeString.c_str(), timeElapsed);
+            // ImGui::Text("%s ((%f))", timeString.c_str(), timeElapsed);
+            ImGui::Text("%.0f s", timeElapsed);
         }
             ImGui::NextColumn();
             ImGui::Text("%s", host.branch.c_str());
@@ -85,9 +86,8 @@ void SoftwareDebugPanel::setup()
     // Populate hosts array
     auto lockHost = hosts.lock();
     *lockHost = {
-        {"192.168.1.5", "Host 1", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi"},
-        {"192.168.1.5", "Host 2", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi"},
-        {"192.168.1.5", "Host 3", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi"}
+        {"192.168.1.3", "Host 1", "/home/jimmy/urc_deploy/debugInfo.csv", "jimmy", "lusi"},
+        {"192.168.1.5", "Host 2", "/home/pi/urc_deploy/debugInfo.csv", "pi", "lusi"}
     };
 }
 
@@ -133,21 +133,11 @@ void SoftwareDebugPanel::readDebugInfoFile(Host& host)
     std::getline(ss, gitCommitMessage, ',');
     std::getline(ss, branch, ',');
     std::getline(ss, userName, ',');
-        
-    // std::getline(iss, dateTime, ',');
-    // std::getline(iss, gitCommitHash, ',');
-    // std::getline(iss, gitCommitMessage, ',');
-    // std::getline(iss, branch, ',');
-    // std::getline(iss, userName, ',');
 
     std::stringstream timeStringStream(dateTime);
     std::tm t = {};
     timeStringStream >> std::get_time(&t, "%Y-%m-%d %H:%M:%S");
     host.time_point = std::chrono::system_clock::from_time_t(std::mktime(&t));
-    // std::stringstream ss(dateTime);
-    // std::tm t = {};
-    // ss >> std::get_time(&t, "%Y-%m-%d %H:%M:%S");
-    // host.time_point = std::chrono::system_clock::from_time_t(std::mktime(&t));
     
     host.branch = branch;
     host.userName = userName;
