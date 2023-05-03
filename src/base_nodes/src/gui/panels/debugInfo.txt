@@ -1,2 +1,0 @@
-Date and Time, Git Branch, Git User Name
-2022-04-19 09:30:00, branch-1, User1
