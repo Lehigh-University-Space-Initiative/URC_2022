@@ -13,6 +13,7 @@
 #include "panels/TelemetryPanel.h"
 #include "panels/SystemControlPanel.h"
 #include "panels/VideoViewPanel.h"
+#include "panels/Console.h"
 
 std::vector<Panel*> uiPanels{};
 
@@ -21,6 +22,7 @@ void loadPanels() {
    uiPanels.push_back(new TelemetryPanel("Telemetry"));
    uiPanels.push_back(new SystemControlPanel("System Control"));
    uiPanels.push_back(new VideoViewPanel("Video Stream"));
+   uiPanels.push_back(new Console("Console"));
 
    for(auto p : uiPanels) {
       p->setup();
