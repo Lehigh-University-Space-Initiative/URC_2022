@@ -1,11 +1,13 @@
 <launch>
   <!-- Load the urdf into the parameter server. -->
-  <param name="my_robot_description" textfile="$(find simulation)/descriptions/rover.world"/>
+  <param name="robot_description" textfile="$(find simulation)/descriptions/rover.world"/>
    
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" >
-      <remap from="robot_description" to="my_robot_description" />
+      <!-- <remap from="robot_description" to="my_robot_description" /> -->
       <!-- <remap from="joint_states" to="different_joint_states" /> -->
   </node>
+
+
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -16,5 +18,8 @@
     <arg name="gui" value="true"/>
     <arg name="recording" value="false"/>
     <arg name="debug" value="false"/>
-  </include>
+  </include> -->
+
+  <!-- Spawn the robot model -->
+  <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model LUSIrover -x 0 -y 0 -z 0" /> 
 </launch>

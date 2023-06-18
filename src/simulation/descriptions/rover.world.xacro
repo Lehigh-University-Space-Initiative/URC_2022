@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rover name="LUSIrover" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="LUSIrover" xmlns:xacro="http://ros.org/wiki/xacro">
 <!-- coppied from the mutli wheel dif drive dependancy -->
     <xacro:property name="WheelSep" value="0.46"/>
     <xacro:property name="WheelRad" value="0.1"/>
@@ -14,8 +14,7 @@
         </inertial>
     </xacro:macro>
 
-    <link name="base_link">
-        <pose>0 0 0.1 0 0 0</pose>
+    <link name="chassis">
         <visual>
             <geometry>
                 <box size="0.8 0.4 0.2"/>
@@ -26,11 +25,19 @@
                 <box size="0.8 0.4 0.2"/>
             </geometry>
         </collision>
-        <xacro:default_inertial mass="15"/>
+        <xacro:default_inertial mass="14"/>
+    </link>
+
+    <link name="base_link">
+        <pose>0 0 0.1 0 0 0</pose>
     </link>
     <gazebo reference="base_link">
         <material>Gazebo/Blue</material>
     </gazebo>
+    <joint name="root_to_chassis" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+    </joint>
 
     <!-- wheels -->
     <xacro:macro name="wheels" params = "prefex reflect">
@@ -212,4 +219,4 @@
             <legacyMode>false</legacyMode>
         </plugin>
     </gazebo>
-</rover>
+</robot>
