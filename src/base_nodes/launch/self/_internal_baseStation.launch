@@ -1,7 +1,11 @@
 <launch>
     <arg name="debug" default="false" />
-    <!-- <node pkg="base_nodes" name="station_gui" type="gui.py" /> -->
-    <node pkg="base_nodes" name="GroundStationGUI" type="GroundStationGUI" />
+    <arg name="hootl" default="false" />
+
+    <node pkg="base_nodes" name="GroundStationGUI" type="GroundStationGUI" output="screen"> 
+        <param name="debug" value="$(arg debug)"/>
+        <param name="hootl" type="bool" value="true"/>
+    </node>
 
     <!-- if debug, include debug tools -->
     <group if="$(arg debug)">

@@ -3,6 +3,18 @@
 
 void ComStatusPanel::drawBody()
 {
+
+    if (hootl) {
+        //Show test saying "Hardware out of the loop"
+        // the text should fade between red and white
+        float t = sin(ImGui::GetTime() * 3.141592f * 4);
+
+        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255 * t, 255 * t, 255));
+        ImGui::Text("Hardware out of the loop test");
+        ImGui::PopStyleColor();
+
+    }
+
     for (size_t i = 0; i < hosts.size(); i++)
     {
         ImGui::Separator();
@@ -56,10 +68,10 @@ std::string ComStatusPanel::conString(size_t hostIndex)
 
     auto lastHeard = std::chrono::system_clock::now() - hosts[hostIndex]->getLastContact();
 
-    if (lastHeard >= maxConnectionDur) {
+    if (lastHeard >= maxConnectionDur && !hootl) {
         str = "Not Connected";
     }
-    else if (lastHeard >= connectionDur) {
+    else if (lastHeard >= connectionDur && !hootl) {
             auto num_text =  std::to_string(((double)lastHeard.count() / 1'000'000'000));
             std::string rounded = num_text.substr(0, num_text.find("."));
         str = "LOS: " + rounded + " seconds";
@@ -73,7 +85,7 @@ std::string ComStatusPanel::conString(size_t hostIndex)
 ImU32 ComStatusPanel::conColor(size_t hostIndex)
 {   
     auto lastHeard = std::chrono::system_clock::now() - hosts[hostIndex]->getLastContact();
-    if (lastHeard >= connectionDur) {
+    if (lastHeard >= connectionDur && !hootl) {
         return IM_COL32(245,61,5,255);
     }else {
         return IM_COL32(0,255,0,255);
@@ -87,6 +99,10 @@ void ComStatusPanel::setup()
 
     hosts.push_back(new ComStatusChecker("192.168.1.160", "Rover Antenna"));
     hosts.push_back(new ComStatusChecker("192.168.1.159", "Base Station"));
+
+
+    if (!ros::param::get("~hootl",hootl))
+        ROS_ERROR("Failed to get hootl param");
 }
 
 void ComStatusPanel::update()

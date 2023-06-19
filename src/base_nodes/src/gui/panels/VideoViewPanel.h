@@ -9,8 +9,14 @@
 
 
 class VideoViewPanel: public Panel {
-protected:
+public:
+    using Panel::Panel;
 
+    virtual void setup() override;
+    virtual void update() override;
+    virtual ~VideoViewPanel();
+
+protected:
     struct Camera {
         int id;
         std::string name;
@@ -43,10 +49,5 @@ protected:
 
     void setNewIMG();
     void setLOSIMG();
-public:
-    using Panel::Panel;
 
-    virtual void setup() override;
-    virtual void update() override;
-    virtual ~VideoViewPanel();
 };

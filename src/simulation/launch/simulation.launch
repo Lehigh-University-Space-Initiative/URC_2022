@@ -18,7 +18,7 @@
     <arg name="gui" value="true"/>
     <arg name="recording" value="false"/>
     <arg name="debug" value="false"/>
-  </include> -->
+  </include>
 
   <!-- Spawn the robot model -->
   <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model LUSIrover -x 0 -y 0 -z 0" /> 
