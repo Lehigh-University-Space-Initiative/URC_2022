@@ -4,7 +4,7 @@
 
     <node pkg="base_nodes" name="GroundStationGUI" type="GroundStationGUI" output="screen"> 
         <param name="debug" value="$(arg debug)"/>
-        <param name="hootl" type="bool" value="true"/>
+        <param name="hootl" type="bool" value="$(arg hootl)"/>
     </node>
 
     <!-- if debug, include debug tools -->
