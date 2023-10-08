@@ -8,15 +8,15 @@ void DriveTrainMotorManager::setupMotors()
     // //Actual Numbers
     {
         //left side (BUS 0)
-        motors.push_back(SparkMax(0, 1)); //LF
-        motors.push_back(SparkMax(0, 2)); //LM
-        motors.push_back(SparkMax(0, 3)); // LB
+        motors.push_back(SparkMax(1, 1)); //LF
+        motors.push_back(SparkMax(1, 2)); //LM
+        motors.push_back(SparkMax(1, 3)); // LB
     }
     {
         //right side (BUS 1
-        motors.push_back(SparkMax(0, 4)); //RB
-        motors.push_back(SparkMax(0, 5)); //RM
-        motors.push_back(SparkMax(0, 6)); //RF
+        motors.push_back(SparkMax(1, 4)); //RB
+        motors.push_back(SparkMax(1, 5)); //RM
+        motors.push_back(SparkMax(1, 6)); //RF
     }
 
     ROS_ERROR("Testing Motors");
