@@ -30,7 +30,7 @@
     <joint name="camera_joint" type="fixed">
         <parent link="chassis"/>
         <child link="camera_link"/>
-        <origin xyz="0.7 0.4 0" rpy="0 0 0"/>
+        <origin xyz="0.4 0 0.1" rpy="0 0 0"/>
     </joint>
 
     <link name="camera_link">
@@ -266,6 +266,10 @@
             </camera>
             <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
                 <frame_name>camera_link_optical</frame_name>
+                <always_on>True</always_on>
+                <updateRate>0.0</updateRate>
+                <cameraName>/LUSIrover/videoStream</cameraName>
+                <imageTopicName>/videoStream</imageTopicName>
             </plugin>
         </sensor>
     </gazebo>
