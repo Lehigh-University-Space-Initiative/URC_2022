@@ -19,3 +19,5 @@ URC_DeployTools/config/localConfig_no_git/*
 
 #this is rebuilt by the compiler
 src/simulation/descriptions/rover.world
+
+*imgui.ini
