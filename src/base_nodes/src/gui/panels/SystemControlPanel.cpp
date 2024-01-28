@@ -13,8 +13,16 @@ void SystemControlPanel::drawBody()
     // ImGui::ProgressBar(lastDriveCMD.CMD_R.z); 
 
     //software locks all motors to stop
-    if (ImGui::Button("Motor Freeze")) {
-        
+    bool eStopStatus = false;
+
+    if (ImGui::Button("Toggle ESTOP")){
+        eStopStatus = !eStopStatus;
+    }
+
+    if (eStopStatus) {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+    } else {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
     }
 
     if (ImGui::Button("Reboot")) {
