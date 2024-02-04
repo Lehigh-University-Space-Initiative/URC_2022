@@ -6,20 +6,20 @@
 #include <mutex>
 
 class SystemControlPanel: public Panel {
-protected:
+    public:
+        using Panel::Panel;
 
-    //models:
-    // cross_pkg_messages::RoverComputerDriveCMD lastDriveCMD;
-
-    ros::Subscriber sub;
-
-    ros::NodeHandle n;
-
-    virtual void drawBody();
-public:
-    using Panel::Panel;
-
-    virtual void setup() override;
-    virtual void update() override;
-    ~SystemControlPanel();
+        virtual void setup() override;
+        virtual void update() override;
+        ~SystemControlPanel();
+    
+    protected:
+        //Variables:
+        bool eStopStatus = true; //Button initially set to red and e-stop initially on for safety
+        
+        //Models:
+        // cross_pkg_messages::RoverComputerDriveCMD lastDriveCMD;
+        ros::Subscriber sub;
+        ros::NodeHandle n;
+        virtual void drawBody();
 };
