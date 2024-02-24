@@ -26,6 +26,12 @@ public:
 };
 
 class ComStatusPanel: public Panel {
+public:
+    using Panel::Panel;
+
+    virtual void setup() override;
+    virtual void update() override;
+    ~ComStatusPanel();
 protected:
     virtual void drawBody();
 
@@ -36,11 +42,6 @@ protected:
     std::string conString(size_t hostIndex);
     ImU32 conColor(size_t hostIndex);
 
-public:
-    using Panel::Panel;
-
-    virtual void setup() override;
-    virtual void update() override;
-    ~ComStatusPanel();
+    bool hootl = false;
 
 };

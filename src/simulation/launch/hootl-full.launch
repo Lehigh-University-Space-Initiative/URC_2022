@@ -1,0 +1,12 @@
+<launch>
+    <include file="$(find simulation)/launch/simulation.launch"/>
+
+    <include file="$(find base_nodes)/launch/self/baseStation.launch">
+        <arg name="hootl" value="true"/>
+    </include>
+
+    <include file="$(find jetson_nodes)/launch/self/jetson.launch">
+        <arg name="hootl" value="true"/>
+    </include>
+
+</launch>
