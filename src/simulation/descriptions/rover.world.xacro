@@ -234,7 +234,7 @@
             <wheelDiameter>${WheelRad*2}</wheelDiameter>
             <wheelAcceleration>0.2</wheelAcceleration>
             <wheelTorque>5</wheelTorque>
-            <commandTopic>diff_drive_controller/cmd_vel</commandTopic>
+            <commandTopic>/diff_drive_controller/cmd_vel</commandTopic>
             <odometryTopic>odom</odometryTopic>
             <odometryFrame>odom</odometryFrame>
             <robotBaseFrame>base_link</robotBaseFrame>
@@ -244,6 +244,17 @@
             <publishWheelJointState>true</publishWheelJointState>
             <legacyMode>false</legacyMode>
         </plugin>
+    </gazebo>
+    <gazebo>
+        <plugin filename="libignition-gazebo-triggered-publisher-system.so"
+            name="ignition::gazebo::systems::TriggeredPublisher">
+            <input type="ignition.msgs.Int32" topic="/test">
+                <match field="data">1</match>
+            </input>
+    <output type="ignition.msgs.Twist" topic="/cmd_vel">
+        linear: {x: 0.5}, angular: {z: 0.0}
+    </output>
+</plugin>
     </gazebo>
     <gazebo reference="camera_link">
         <material>Gazebo/Red</material>
