@@ -18,7 +18,7 @@ void SystemControlPanel::drawBody()
     }
 
     if (ImGui::Button("Reboot")) {
-        // system("~/URC_2022/URC_DeployTools/reboot.sh");
+        system("~/URC_2022/URC_DeployTools/reboot.sh");
     }
 
     ImGui::SameLine();
@@ -29,7 +29,9 @@ void SystemControlPanel::drawBody()
     
     ImGui::SameLine();
 
-    
+    if (ImGui::Button("Close Ground Station")) {
+        close_ui = true;
+    }
 
 }
 

@@ -29,6 +29,7 @@ void loadPanels() {
    }
 }
 
+bool close_ui = false;
 
 int main(int argc, char** argv) {
     
@@ -48,7 +49,7 @@ int main(int argc, char** argv) {
 
    std::chrono::system_clock::time_point last_frame;
 
-   while (n.ok() && !glfwWindowShouldClose(window)) {
+   while (n.ok() && !glfwWindowShouldClose(window) && !close_ui) {
       glfwPollEvents();
 
 

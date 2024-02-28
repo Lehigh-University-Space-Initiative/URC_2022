@@ -15,7 +15,7 @@ void sendDrivePowers() {
 }
 
 void manualInputCalback(const cross_pkg_messages::ManualDriveCMDConstPtr& msg) {
-   ROS_INFO("I heard: [%d]", msg->value.x);
+   //ROS_INFO("I heard: [%d]", msg->value.x);
 
    //TODO: convert to pid:
    currentDriveCommand.CMD_L.x = msg->value.x;
