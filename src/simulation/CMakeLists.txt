@@ -13,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   sensor_msgs
   xacro
+  gazebo_ros_diff_drive_multiwheel
+  cross_pkg_messages
 )
 
 ## System dependencies are found with CMake's conventions
