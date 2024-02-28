@@ -231,3 +231,20 @@ add_executable(GroundStationGUI ${GUIFiles})
 target_include_directories(GroundStationGUI PRIVATE ../../vendor/imgui2 ../../vendor/imgui2/backends include/cs_libguarded)
 target_link_libraries(GroundStationGUI ${catkin_LIBRARIES} glfw GL dl opencv_highgui)
 add_dependencies(GroundStationGUI ${catkin_EXPORTED_TARGETS})
+
+file(GLOB VisionFiles
+        "src/LUSIVisionStreamer/*.cpp"
+        "src/LUSIVisionStreamer/*.h"
+
+        "src/LUSIVisionStreamer/SockPP/src/*.cpp"
+        #"src/LUSIVisionStreamer/SockPP/include/sockpp/*.h"
+
+        "src/LUSIVisionStreamer/SockPP/src/linux/*.cpp"
+        "src/LUSIVisionStreamer/SockPP/src/unix*.h"
+)   
+
+
+add_executable(LUSIVisionStreamer_node ${VisionFiles})
+target_include_directories(LUSIVisionStreamer_node PRIVATE src/LUSIVisionStreamer/SockPP/include include/cs_libguarded)
+target_link_libraries(LUSIVisionStreamer_node ${catkin_LIBRARIES})
+add_dependencies(LUSIVisionStreamer_node ${catkin_EXPORTED_TARGETS})
