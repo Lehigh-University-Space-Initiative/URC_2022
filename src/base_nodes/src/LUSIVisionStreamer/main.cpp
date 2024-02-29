@@ -141,7 +141,7 @@ void run_telem_tcp_server() {
             sockpp::tcp_socket sock = res.release();
 
             // Create a thread and transfer the new stream to it.
-            std::thread thr(run_con, std::move(sock));
+            std::thread thr(run_telem_con, std::move(sock));
             thr.detach();
         }
     }
@@ -161,6 +161,7 @@ void run_telem_con(sockpp::tcp_socket sock) {
          auto g = gen.lock();
          auto telem = (*g)->generate();
          sock.write_n(&telem,sizeof(telem));
+         ROS_INFO("frame");
       }
 
       loop.sleep();

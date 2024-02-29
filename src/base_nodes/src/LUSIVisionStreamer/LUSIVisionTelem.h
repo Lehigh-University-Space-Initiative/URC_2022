@@ -52,9 +52,9 @@ struct LUSIVisionTelem {
 class LUSIVIsionGenerator {
 public:
 
-    cross_pkg_messages::RoverComputerDriveCMD lastDriveCMD;
-    cross_pkg_messages::RoverComputerDriveCMD lastArmCMD;
-    cross_pkg_messages::GPSData lastGPS;
+    cross_pkg_messages::RoverComputerDriveCMD lastDriveCMD{};
+    cross_pkg_messages::RoverComputerDriveCMD lastArmCMD{};
+    cross_pkg_messages::GPSData lastGPS{};
 
     ros::Subscriber sub;
     ros::Subscriber sub2;

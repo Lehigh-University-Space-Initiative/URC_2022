@@ -32,8 +32,8 @@ LUSIVisionTelem LUSIVIsionGenerator::generate()
     telem.softwareInTheLoopTestMode = false;
     telem.controlScheme = 0;
     telem.operationMode = 0;
-    //No timestamp data
-    // telem.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    // //No timestamp data
+    // // telem.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
     telem.driveInputsLeft[0] = lastDriveCMD.CMD_L.x;
     telem.driveInputsLeft[1] = lastDriveCMD.CMD_L.y;
