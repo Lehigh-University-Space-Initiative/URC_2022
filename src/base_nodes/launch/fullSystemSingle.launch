@@ -1,9 +1,13 @@
-<launch>
+<!-- This file should not be used. Each logical node launches it's own ros nodes. -->
+<launch> 
     <arg name="debug" default="false" />
+    <arg name="hootl" default="false" />
     <include file="$(find base_nodes)/launch/self/baseStation.launch">
         <arg name="debug" value="$(arg debug)"/>
     </include>
-    <include file="$(find jetson_nodes)/launch/fullRoverSingle.launch"/>
+    <include file="$(find jetson_nodes)/launch/fullRoverSingle.launch">
+        <arg name="hootl" value="$(arg hootl)"/>
+    </include>
     
 
 </launch>

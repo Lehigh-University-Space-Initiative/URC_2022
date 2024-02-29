@@ -1,39 +1,4 @@
-// #pragma once
-
-
-#include "CANDriver.h"
-#include "Utilities.h"
-#include "ros/ros.h"
-
-#include <cs_plain_guarded.h>
-
-#include <thread>
-
-#include "cross_pkg_messages/RoverComputerDriveCMD.h"
-
-class DriveTrainMotorManager {
-private:
-    std::vector<SparkMax> motors;
-
-    void setupMotors();
-
-    libguarded::plain_guarded<bool> sendHeartbeatsFlag{true};
-    libguarded::plain_guarded<bool> heartbeatThreadShutDown{false};
-    void sendHeartbeats();
-    void heartbeatThread();
-    std::thread heartbeatThreadObj;
-
-    ros::Subscriber driveCommandsSub;
-    ros::NodeHandle nodeHandle;
-
-    void parseDriveCommands(const cross_pkg_messages::RoverComputerDriveCMDConstPtr& msg);
-
-public:
-    DriveTrainMotorManager();
-    virtual ~DriveTrainMotorManager();
-};
-
-// #include "DriveTrainMotorManager.h"
+#include "DriveTrainMotorManager.h"
 
 
 void DriveTrainMotorManager::setupMotors()
@@ -43,24 +8,27 @@ void DriveTrainMotorManager::setupMotors()
     // //Actual Numbers
     {
         //left side (BUS 0)
-        motors.push_back(SparkMax(0, 1)); //LF
-        motors.push_back(SparkMax(0, 2)); //LM
-        motors.push_back(SparkMax(0, 3)); // LB
+        motors.push_back(SparkMax(1, 1)); //LF
+        motors.push_back(SparkMax(1, 2)); //LM
+        motors.push_back(SparkMax(1, 3)); // LB
     }
     {
         //right side (BUS 1
-        motors.push_back(SparkMax(0, 4)); //RB
-        motors.push_back(SparkMax(0, 5)); //RM
-        motors.push_back(SparkMax(0, 6)); //RF
+        motors.push_back(SparkMax(1, 4)); //RB
+        motors.push_back(SparkMax(1, 5)); //RM
+        motors.push_back(SparkMax(1, 6)); //RF
     }
 
-// //     //Testing numbers
-// //     motors.push_back(SparkMax(0,15));
-// //     ROS_INFO("Identifying motor 0");
-// //     motors[0].ident();
-    ROS_ERROR("TEST ERR");
+    ROS_ERROR("Testing Motors");
     for (auto& motor: motors)
         motor.ident();
+}
+
+void DriveTrainMotorManager::stopAllMotors()
+{
+    for (auto& motor : motors) {
+        motor.sendPowerCMD(0);
+    }
 }
 
 void DriveTrainMotorManager::sendHeartbeats()
@@ -90,6 +58,17 @@ void DriveTrainMotorManager::heartbeatThread()
                 sendHeartbeats();
             }
         }
+        
+        //LOS Safety Stop
+        {
+            auto lock = lastManualCommandTime.lock();
+            auto now = std::chrono::system_clock::now();
+            if (now - *lock > manualCommandTimeout) {
+                ROS_WARN("LOS Safety Stop");
+                stopAllMotors();
+            }
+        }
+
         loop_rate.sleep();
     }
 }
@@ -133,6 +112,10 @@ DriveTrainMotorManager::DriveTrainMotorManager()
     heartbeatThreadObj = std::thread(&DriveTrainMotorManager::heartbeatThread, this);   
 
     auto calback = boost::function<void(const cross_pkg_messages::RoverComputerDriveCMDConstPtr&)>([this](auto p){
+        {
+            auto lock = lastManualCommandTime.lock();
+            *lock = std::chrono::system_clock::now();
+        }
         parseDriveCommands(p);
     });
 

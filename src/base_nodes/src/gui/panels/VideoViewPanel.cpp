@@ -30,6 +30,8 @@ void VideoViewPanel::drawBody()
         }
     }
 
+   
+
     ImGui::Separator();
 
     currentImageHolder->imguiDrawImage(); 

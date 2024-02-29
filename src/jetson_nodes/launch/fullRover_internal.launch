@@ -1,7 +1,8 @@
+<!-- DO NOT USE -->
 <launch>
-    <arg name="singleComputer" default="false" />
+    <arg name="hootl" default="false" />
     <!-- run the self/jetson.launch file -->
     <include file="$(find jetson_nodes)/launch/self/jetson.launch">
-        <arg name="singleComputer" value="$(arg singleComputer)" />
+        <arg name="hootl" value="$(arg hootl)" />
     </include>
 </launch>

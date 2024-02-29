@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rover name="LUSIrover" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="LUSIrover" xmlns:xacro="http://ros.org/wiki/xacro">
 <!-- coppied from the mutli wheel dif drive dependancy -->
     <xacro:property name="WheelSep" value="0.46"/>
     <xacro:property name="WheelRad" value="0.1"/>
@@ -14,8 +14,7 @@
         </inertial>
     </xacro:macro>
 
-    <link name="base_link">
-        <pose>0 0 0.1 0 0 0</pose>
+    <link name="chassis">
         <visual>
             <geometry>
                 <box size="0.8 0.4 0.2"/>
@@ -26,11 +25,45 @@
                 <box size="0.8 0.4 0.2"/>
             </geometry>
         </collision>
-        <xacro:default_inertial mass="15"/>
+        <xacro:default_inertial mass="14"/>
+    </link>
+    <joint name="camera_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="camera_link"/>
+        <origin xyz="0.4 0 0.1" rpy="0 0 0"/>
+    </joint>
+
+    <link name="camera_link">
+        <visual>
+            <geometry>
+                <box size="0.010 0.03 0.03"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+    </link> 
+
+    <gazebo reference="camera_link">
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <joint name="camera_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+        <parent link="camera_link" />
+        <child link="camera_link_optical" />
+    </joint>
+
+    <link name="camera_link_optical"></link>
+
+    <link name="base_link">
+        <pose>0 0 0.1 0 0 0</pose>
     </link>
     <gazebo reference="base_link">
         <material>Gazebo/Blue</material>
     </gazebo>
+    <joint name="root_to_chassis" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+    </joint>
 
     <!-- wheels -->
     <xacro:macro name="wheels" params = "prefex reflect">
@@ -212,4 +245,32 @@
             <legacyMode>false</legacyMode>
         </plugin>
     </gazebo>
-</rover>
+    <gazebo reference="camera_link">
+        <material>Gazebo/Red</material>
+ 
+        <sensor name="videoStream" type="camera">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <camera>
+                <horizontal_fov>1.089</horizontal_fov>
+                <image>
+                    <format>R8G8B8</format>
+                    <width>640</width>
+                    <height>480</height>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>8.0</far>
+                </clip>
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <frame_name>camera_link_optical</frame_name>
+                <always_on>True</always_on>
+                <updateRate>0.0</updateRate>
+                <cameraName>/LUSIrover/videoStream</cameraName>
+                <imageTopicName>/videoStream</imageTopicName>
+            </plugin>
+        </sensor>
+    </gazebo>
+</robot>
