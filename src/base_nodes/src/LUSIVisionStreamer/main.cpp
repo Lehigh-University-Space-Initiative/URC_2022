@@ -161,7 +161,7 @@ void run_telem_con(sockpp::tcp_socket sock) {
          auto g = gen.lock();
          auto telem = (*g)->generate();
          sock.write_n(&telem,sizeof(telem));
-         ROS_INFO("frame");
+         ROS_INFO("frame size: %d", sizeof(telem));
       }
 
       loop.sleep();

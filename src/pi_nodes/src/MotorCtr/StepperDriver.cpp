@@ -22,10 +22,10 @@ void StepperDriver::setupGPIO()
     gpioSetMode(stepPin, PI_OUTPUT);
     gpioSetMode(enablePin, PI_OUTPUT);
     
-    //set the pins to low
-    gpioWrite(dirPin, PI_LOW);
-    gpioWrite(stepPin, PI_LOW);
-    gpioWrite(enablePin, PI_LOW);
+    //set the pins to high
+    gpioWrite(dirPin, PI_HIGH);
+    gpioWrite(stepPin, PI_HIGH);
+    gpioWrite(enablePin, PI_HIGH);
 
     //set the initial setup flag
     initialSetup = true;
@@ -35,14 +35,14 @@ void StepperDriver::setupGPIO()
 
 void StepperDriver::step()
 {
-    //set the step pin high
-    gpioWrite(stepPin, PI_HIGH);
+    //set the step pin low
+    gpioWrite(stepPin, PI_LOW);
 
     //wait 10 microseconds
     gpioDelay(1000);
 
-    //set the step pin low
-    gpioWrite(stepPin, PI_LOW);
+    //set the step pin high
+    gpioWrite(stepPin, PI_HIGH);
 
     std::cout << "stepped for step pin: " << stepPin << std::endl;
 }

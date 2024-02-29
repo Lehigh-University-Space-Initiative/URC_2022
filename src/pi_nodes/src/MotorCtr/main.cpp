@@ -10,6 +10,7 @@
 #include "StepperDriver.h"
 #include "DriveTrainMotorManager.h"
 
+#include "StepperDriver.h"
 
 /*
 Note 
@@ -28,6 +29,13 @@ right trigger: open end effect
 */
 
 
+//StepperDriver wrist_yaw(10,27,22,1,200);
+
+void callback(const cross_pkg_messages::RoverComputerDriveCMDConstPtr& t) {
+   //ROS_INFO("Sending %f",t->CMD_R.z);
+   //wrist_yaw.setVelocity(t->CMD_R.z);
+}
+
 int main(int argc, char** argv) {
     
    ros::init(argc, argv, "Motor_CTR"); 
@@ -39,8 +47,19 @@ int main(int argc, char** argv) {
 
    ros::Rate loop_rate(100);
 
+   auto driveCommandsSub = n.subscribe("/roverDriveCommands", 10, callback); 
+   
+
+   wrist_yaw.setEnable(false);
+   wrist_yaw.setDir(true);
+
    while (ros::ok()) {
       ros::spinOnce();
+
+      //wrist_yaw.tick();
+
       loop_rate.sleep();
    }
+
+   wrist_yaw.setEnable(true);
 }

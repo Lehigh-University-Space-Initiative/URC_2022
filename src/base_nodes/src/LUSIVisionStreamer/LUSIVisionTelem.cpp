@@ -29,7 +29,7 @@ LUSIVisionTelem LUSIVIsionGenerator::generate()
 {
     LUSIVisionTelem telem{};
 
-    telem.softwareInTheLoopTestMode = false;
+    //telem.softwareInTheLoopTestMode = false;
     telem.controlScheme = 0;
     telem.operationMode = 0;
     // //No timestamp data

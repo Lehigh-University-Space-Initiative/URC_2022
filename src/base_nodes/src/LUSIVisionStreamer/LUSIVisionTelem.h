@@ -29,7 +29,7 @@ struct LUSIVisionTelem {
 
     uint64_t timestamp;
 
-    bool softwareInTheLoopTestMode;
+    //bool softwareInTheLoopTestMode;
 
     int controlScheme; // 0 = driveline, 1 = arm
     int operationMode; // 0 = manual, 1 = autonomous
