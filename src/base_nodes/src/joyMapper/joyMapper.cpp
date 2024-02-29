@@ -36,7 +36,10 @@ void joy1Callback(const sensor_msgs::JoyConstPtr& msg) {
 void sendCMD() {
    if (!gotA0MSG || !gotA1MSG) return;
 
-   float sensitivity = 0.2f; //0.40f;
+   float sensitivity_streight = 0.2f; //0.40f;
+   float sensitivity_turn = 0.4f; //0.40f;
+
+
    cross_pkg_messages::ManualDriveCMD cmd;
    #if TESTING_MODE
    //test in a sin wive for x and cos wave for y
@@ -49,6 +52,13 @@ void sendCMD() {
    cmd.value.y = mag * cos(ros::Time::now().toSec() * 2.0f * M_PI / period);
 
    #else
+
+   float diff = abs(last0MSG.axes[1] - last1MSG.axes[1]);
+
+   float turn_t_val = diff / ((last0MSG.axes[1] + last1MSG.axes[1]) / 2);
+
+   float sensitivity = sensitivity_streight + ((sensitivity_turn - sensitivity_streight) * turn_t_val);
+
    cmd.value.x = last0MSG.axes[1] * sensitivity;
    //temp inverting before fixing motroctr
    cmd.value.y = last1MSG.axes[1] * -sensitivity;

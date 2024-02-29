@@ -234,6 +234,7 @@ add_dependencies(GroundStationGUI ${catkin_EXPORTED_TARGETS})
 
 file(GLOB VisionFiles
         "src/LUSIVisionStreamer/*.cpp"
+        "src/LUSIVisionStreamer/LUSIVisionTelem.cpp"
         "src/LUSIVisionStreamer/*.h"
 
         "src/LUSIVisionStreamer/SockPP/src/*.cpp"

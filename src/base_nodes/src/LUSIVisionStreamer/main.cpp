@@ -15,9 +15,14 @@
 #include "cs_plain_guarded.h"
 #include "thread"
 
+#include "LUSIVisionTelem.h"
+
+
 libguarded::plain_guarded<std::vector<uchar>> lastImage;
 
 std::vector<uchar> no_img;
+
+libguarded::plain_guarded<LUSIVIsionGenerator*> gen;
 
 void proccess_frame(const sensor_msgs::ImageConstPtr& msg) {
     //    ROS_INFO("got frame");
@@ -51,7 +56,7 @@ void run_con(sockpp::tcp_socket sock);
 
 void run_tcp_server() {
    std::error_code ec;
-    sockpp::tcp_acceptor acc{8010, 4, ec};
+    sockpp::tcp_acceptor acc{8010, 10, ec};
 
     if (ec) {
         //cerr << "Error creating the acceptor: " << ec.message() << endl;
@@ -108,6 +113,68 @@ void run_con(sockpp::tcp_socket sock) {
 
 }
 
+//--------------TELEM----------------
+
+void run_telem_con(sockpp::tcp_socket sock);
+
+void run_telem_tcp_server() {
+   std::error_code ec;
+    sockpp::tcp_acceptor acc{8009, 10, ec};
+
+    if (ec) {
+        //cerr << "Error creating the acceptor: " << ec.message() << endl;
+        ROS_ERROR("Could not create tcp acceptor");
+        return;
+    }
+    //cout << "Awaiting connections on port " << port << "..." << endl;
+
+    while (true) {
+        sockpp::inet_address peer;
+
+        // Accept a new client connection
+        if (auto res = acc.accept(&peer); !res) {
+            //cerr << "Error accepting incoming connection: " << res.error_message() << endl;
+        }
+        else {
+            ROS_INFO("Received a connection request from []", peer);
+            numClientsConnected++;
+            sockpp::tcp_socket sock = res.release();
+
+            // Create a thread and transfer the new stream to it.
+            std::thread thr(run_con, std::move(sock));
+            thr.detach();
+        }
+    }
+
+}
+
+void run_telem_con(sockpp::tcp_socket sock) {
+
+   std::vector<char> bytes;
+   bytes.resize(10);
+   
+   ros::Rate loop(30);
+
+   while (true) {
+
+      {
+         auto g = gen.lock();
+         auto telem = (*g)->generate();
+         sock.write_n(&telem,sizeof(telem));
+      }
+
+      loop.sleep();
+   }
+
+   numClientsConnected--;
+
+}
+
+
+// --------------------------------------------
+
+
+
 
 int main(int argc, char** argv) {
     
@@ -115,6 +182,10 @@ int main(int argc, char** argv) {
 
    ros::NodeHandle n;
 
+   {
+      auto g = gen.lock();
+      *g = new LUSIVIsionGenerator(n);
+   }
 
    //TOOO: set rate to correct amount
    ros::Rate loop_rate(60); 
@@ -139,6 +210,7 @@ int main(int argc, char** argv) {
    sockpp::initialize();
 
    std::thread acceptor(run_tcp_server);
+   std::thread telem_acceptor(run_telem_tcp_server);
    
    while (ros::ok()) {
       //proccsing

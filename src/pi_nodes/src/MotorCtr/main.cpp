@@ -11,6 +11,21 @@
 #include "DriveTrainMotorManager.h"
 
 
+/*
+Note 
+Left stick:
+pitch: pitch
+roll: base rotate
+yaw: M3 rist pitch
+
+right stick
+pitch: elbow pitch
+roll: rist roll
+yaw: rist/ yaw
+
+left trigger: close end effect
+right trigger: open end effect
+*/
 
 
 int main(int argc, char** argv) {
