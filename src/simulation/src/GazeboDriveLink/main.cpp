@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 
     ROS_INFO("Gazebo Drive Link");
 
-   ros::Rate loop_rate(1);
+   ros::Rate loop_rate(60);
 
     driveTrainPublisher = n.advertise<geometry_msgs::Twist>("/diff_drive_controller", 9);
     ros::Publisher joinPub = n.advertise<sensor_msgs::JointState>("/joint_states", 10);

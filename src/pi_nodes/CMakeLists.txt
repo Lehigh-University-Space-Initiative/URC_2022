@@ -236,3 +236,7 @@ list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib"
 if("${isSystemDir}" STREQUAL "-1")
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif("${isSystemDir}" STREQUAL "-1")
+
+add_executable(GpsDriver_node src/GpsDriver/main.cpp)
+target_link_libraries(GpsDriver_node gps ${catkin_LIBRARIES})
+add_dependencies(GpsDriver_node ${catkin_EXPORTED_TARGETS})
