@@ -97,8 +97,10 @@ void DriveTrainMotorManager::heartbeatThread()
 void DriveTrainMotorManager::parseDriveCommands(const cross_pkg_messages::RoverComputerDriveCMDConstPtr &msg) {
    ROS_INFO("Drive Commands Recieved with L: %f, R: %f", msg->CMD_L.x, msg->CMD_R.x);
    
-   // Set motor commands to 0 if EStopStatus is true
+   // Set motor commands to 0 if eStopStatus is true
+   bool eStopStatus;
    ros::param::get("eStopStatus", eStopStatus);
+   
    if (eStopStatus) {
       currentDriveCommand.CMD_L.x = 0;
       currentDriveCommand.CMD_L.y = 0;

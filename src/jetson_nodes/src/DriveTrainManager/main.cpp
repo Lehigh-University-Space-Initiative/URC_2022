@@ -49,19 +49,12 @@ int main(int argc, char** argv) {
    driveTrainPublisher = n.advertise<cross_pkg_messages::RoverComputerDriveCMD>("roverDriveCommands", 10);
 
    while (ros::ok()) {
-      //processing
-      
-
       //TODO: add failsafe to set zero power if LOS with base station in teliop
       bool eStopStatus;
       bool roverStopped = n.getParam("eStopStatus", eStopStatus);
       
-      if (roverStopped) {  //Determines if the eStopStatus parameter has been recieved or no and reports relevant info
-         ROS_INFO("Retrieved E-Stop status: %s", eStopStatus ? "true" : "false");
-         
-         if (eStopStatus) {  //Stops message sending if estop button on.
-            ROS_INFO("E-stop button on, rover stopped.");
-         }
+      if (roverStopped && eStopStatus) {  //Conditional if eStopStatus parameter has been recieved and the estop button is turned on
+         ROS_INFO("E-stop button on, rover stopped.");
       }
       else {
          ROS_ERROR("Failed to retrieve E-Stop status");

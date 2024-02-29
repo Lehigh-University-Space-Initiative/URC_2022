@@ -23,9 +23,9 @@ void SystemControlPanel::drawBody() {
         eStopStatus = !eStopStatus;   
     }
     
-    n.setParam("/eStopStatus", eStopStatus);
+    n.setParam("/eStopStatus", eStopStatus);  //Will be used in other nodes
 
-    Imgui::PopStyleColor();
+    ImGui::PopStyleColor();
 
     //Reboot and Deploy Code buttons:
     if (ImGui::Button("Reboot")) {
@@ -47,8 +47,5 @@ void SystemControlPanel::setup()
 //     sub = n.subscribe("roverDriveCommands", 10, f);
 }
 
-void SystemControlPanel::update() {
-    bool previousEstop = eStopStatus;
-}
 
 SystemControlPanel::~SystemControlPanel() {}
