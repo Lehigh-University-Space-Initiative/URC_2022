@@ -28,7 +28,8 @@ private:
     void parseDriveCommands(const cross_pkg_messages::RoverComputerDriveCMDConstPtr& msg);
 
     // dir , step, enable
-    StepperDriver elbow_pitch = StepperDriver(10,9,22,10.0,200);
+    StepperDriver elbow_pitch = StepperDriver(5,6,22,2.0,200);
+    StepperDriver shoulder_pitch = StepperDriver(21,20,22,1.0,200);
 
     StepperDriver wrist_yaw = StepperDriver(11,4,22,1/100.0,200);
     StepperDriver wrist_roll = StepperDriver(17,27,22,1/30.0,200);
