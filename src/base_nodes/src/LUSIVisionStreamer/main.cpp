@@ -73,7 +73,8 @@ void run_tcp_server() {
             //cerr << "Error accepting incoming connection: " << res.error_message() << endl;
         }
         else {
-            ROS_INFO("Received a connection request from []", peer);
+            ROS_INFO("Received a stream connection request from []", peer);
+            numStreamClientsConnected++;
             sockpp::tcp_socket sock = res.release();
 
             // Create a thread and transfer the new stream to it.
@@ -89,7 +90,7 @@ void run_con(sockpp::tcp_socket sock) {
    std::vector<char> bytes;
    bytes.resize(10);
    
-   ros::Rate loop(30);
+   ros::Rate loop(24);
 
    while (true) {
 
@@ -101,15 +102,18 @@ void run_con(sockpp::tcp_socket sock) {
          //ROS_INFO("Sending %d bytes",count);
          
          sock.write_n(&count,sizeof(count));
-         sock.write_n(img->data(),count);
+         auto res = sock.write_n(img->data(),count);
 
-         //sock.write_n("H", 1);
-         //ROS_INFO("H");
+         if (res.value() <= 0) {
+            break;
+         }
+
       }
-      //sock.read(bytes.data(), bytes.size());
 
       loop.sleep();
    }
+
+   numStreamClientsConnected--;
 
 }
 
@@ -155,13 +159,19 @@ void run_telem_con(sockpp::tcp_socket sock) {
    
    ros::Rate loop(30);
 
-   while (true) {
+   while (true)
+   {
 
+      LUSIVisionTelem telem;
       {
          auto g = gen.lock();
-         auto telem = (*g)->generate();
-         sock.write_n(&telem,sizeof(telem));
-         ROS_INFO("frame size: %d", sizeof(telem));
+         telem = (*g)->generate();
+      }
+      auto res = sock.write_n(&telem, sizeof(telem));
+
+      if (res.value() <= 0)
+      {
+         break;
       }
 
       loop.sleep();

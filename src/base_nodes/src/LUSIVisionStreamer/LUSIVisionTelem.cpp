@@ -1,8 +1,9 @@
 #include "LUSIVisionTelem.h"
 
-// #include <chrono>
+#include <chrono>
 
 std::atomic<int> numClientsConnected{0};
+std::atomic<int> numStreamClientsConnected{0};
 
 LUSIVIsionGenerator::LUSIVIsionGenerator(ros::NodeHandle n)
 {
@@ -22,6 +23,9 @@ LUSIVIsionGenerator::LUSIVIsionGenerator(ros::NodeHandle n)
     });
     this->sub3 = n.subscribe("/gps_data", 10, f3);
 
+    if (!ros::param::get("~hootl",hootl))
+        ROS_ERROR("Failed to get hootl param");
+
 
 }
 
@@ -29,19 +33,19 @@ LUSIVisionTelem LUSIVIsionGenerator::generate()
 {
     LUSIVisionTelem telem{};
 
-    //telem.softwareInTheLoopTestMode = false;
+    telem.softwareInTheLoopTestMode = hootl ? 1 : 0;
     telem.controlScheme = 0;
     telem.operationMode = 0;
-    // //No timestamp data
-    // // telem.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    telem.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
     telem.driveInputsLeft[0] = lastDriveCMD.CMD_L.x;
     telem.driveInputsLeft[1] = lastDriveCMD.CMD_L.y;
     telem.driveInputsLeft[2] = lastDriveCMD.CMD_L.z;
 
-    telem.driveInputsRight[0] = lastDriveCMD.CMD_R.x;
-    telem.driveInputsRight[1] = lastDriveCMD.CMD_R.y;
-    telem.driveInputsRight[2] = lastDriveCMD.CMD_R.z;
+    telem.driveInputsRight[0] = -lastDriveCMD.CMD_R.x;
+    telem.driveInputsRight[1] = -lastDriveCMD.CMD_R.y;
+    telem.driveInputsRight[2] = -lastDriveCMD.CMD_R.z;
 
     telem.armInputs[0] = lastArmCMD.CMD_L.x;
     telem.armInputs[1] = lastArmCMD.CMD_L.y;
@@ -51,6 +55,7 @@ LUSIVisionTelem LUSIVIsionGenerator::generate()
     telem.armInputs[5] = lastArmCMD.CMD_R.z;
 
     telem.numClientsConnected = numClientsConnected.load();
+    telem.numStreamClientsConnected = numStreamClientsConnected.load();
 
     telem.gpsLLA[0] = lastGPS.lla.x;
     telem.gpsLLA[1] = lastGPS.lla.y;

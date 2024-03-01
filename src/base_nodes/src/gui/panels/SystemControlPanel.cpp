@@ -17,6 +17,22 @@ void SystemControlPanel::drawBody()
         
     }
 
+    ImGui::SameLine();
+
+    int op_mode;
+    ros::param::get("/op_mode", op_mode);
+
+    if (op_mode) {
+    if (ImGui::Button("Switch to Drive Control")) {
+        ros::param::set("/op_mode", 0);
+    }
+    }
+    else {
+    if (ImGui::Button("Switch to Arm Control")) {
+        ros::param::set("/op_mode", 1);
+    }
+    }
+
     if (ImGui::Button("Reboot")) {
         system("~/URC_2022/URC_DeployTools/reboot.sh");
     }

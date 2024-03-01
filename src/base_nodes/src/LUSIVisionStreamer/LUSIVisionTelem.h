@@ -24,6 +24,7 @@
 
 //atomic count of current number of clients connected to the rover
 extern std::atomic<int> numClientsConnected;
+extern std::atomic<int> numStreamClientsConnected;
 
 struct LUSIVisionTelem {
 
@@ -46,6 +47,10 @@ struct LUSIVisionTelem {
     float speed;
     int gpsSatellites; // number of satellites
 
+    //Version fev 29
+    int numStreamClientsConnected;
+    int softwareInTheLoopTestMode;
+
 
 };
 
@@ -55,6 +60,8 @@ public:
     cross_pkg_messages::RoverComputerDriveCMD lastDriveCMD{};
     cross_pkg_messages::RoverComputerDriveCMD lastArmCMD{};
     cross_pkg_messages::GPSData lastGPS{};
+
+    bool hootl = false;
 
     ros::Subscriber sub;
     ros::Subscriber sub2;

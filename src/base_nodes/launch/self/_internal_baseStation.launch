@@ -28,7 +28,9 @@
     <!-- setup JoyMapper -->
     <node pkg="base_nodes" name="joy_mapper" type="JoyMapper_node" output="screen" />
 
-    <node pkg="base_nodes" name="LUSI_Vision_Streamer" type="LUSIVisionStreamer_node" output="screen" />
+    <node pkg="base_nodes" name="LUSI_Vision_Streamer" type="LUSIVisionStreamer_node" output="screen">
+        <param name="hootl" type="bool" value="$(arg hootl)"/>
+    </node>
 
     <!-- streaming mapping -->
     <!-- <node name="republish" type="republish" pkg="image_transport" output="screen" args="theora in:=/videoStream raw out:=/videoStream/image_raw" /> -->

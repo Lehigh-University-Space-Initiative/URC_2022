@@ -108,6 +108,11 @@ int main(int argc, char** argv) {
       // }
 
       if(!frame.empty()) {
+
+         // if (currentStreamingCam == 1) {
+         //    cv::flip(frame,frame, 0);
+         // }
+
          msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
          auto now = std::chrono::system_clock::now();
          auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameSentTime).count();

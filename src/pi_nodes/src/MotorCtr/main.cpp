@@ -50,8 +50,8 @@ int main(int argc, char** argv) {
    auto driveCommandsSub = n.subscribe("/roverDriveCommands", 10, callback); 
    
 
-   wrist_yaw.setEnable(false);
-   wrist_yaw.setDir(true);
+   //wrist_yaw.setEnable(false);
+   //wrist_yaw.setDir(true);
 
    while (ros::ok()) {
       ros::spinOnce();
@@ -61,5 +61,5 @@ int main(int argc, char** argv) {
       loop_rate.sleep();
    }
 
-   wrist_yaw.setEnable(true);
+   //wrist_yaw.setEnable(true);
 }
