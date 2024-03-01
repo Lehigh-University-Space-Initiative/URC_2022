@@ -9,6 +9,7 @@
 #include "CANDriver.h"
 #include "StepperDriver.h"
 #include "DriveTrainMotorManager.h"
+#include "ArmMotorController.h"
 
 #include "StepperDriver.h"
 
@@ -43,9 +44,10 @@ int main(int argc, char** argv) {
 
    ROS_INFO("Motor CTR startup");
 
-   DriveTrainMotorManager driveTrain{};
+   //DriveTrainMotorManager driveTrain{};
+   ArmMotorManager arm{};
 
-   ros::Rate loop_rate(100);
+   ros::Rate loop_rate(800);
 
    auto driveCommandsSub = n.subscribe("/roverDriveCommands", 10, callback); 
    
@@ -55,6 +57,8 @@ int main(int argc, char** argv) {
 
    while (ros::ok()) {
       ros::spinOnce();
+
+      arm.tick();
 
       //wrist_yaw.tick();
 

@@ -283,7 +283,7 @@
     </output>
 </plugin>
     </gazebo> -->
-    <gazebo reference="camera_link">
+    <!-- <gazebo reference="camera_link">
         <material>Gazebo/Red</material>
  
         <sensor name="videoStream" type="camera">
@@ -310,11 +310,11 @@
                 <imageTopicName>/videoStream</imageTopicName>
             </plugin>
         </sensor>
-    </gazebo>
+    </gazebo> -->
     <gazebo reference="camera2_link">
         <material>Gazebo/Blue</material>
  
-        <sensor name="videoStream2" type="camera">
+        <sensor name="videoStream" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
             <update_rate>20</update_rate>
@@ -330,8 +330,8 @@
                     <far>8.0</far>
                 </clip>
             </camera>
-            <plugin name="camera_controller2" filename="libgazebo_ros_camera.so">
-                <frame_name>camera_link_optical2</frame_name>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <frame_name>camera_link_optical</frame_name>
                 <always_on>True</always_on>
                 <updateRate>0.0</updateRate>
                 <cameraName>/LUSIrover/videoStream2</cameraName>
