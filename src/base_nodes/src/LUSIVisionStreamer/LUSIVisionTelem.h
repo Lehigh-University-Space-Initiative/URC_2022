@@ -26,6 +26,10 @@
 extern std::atomic<int> numClientsConnected;
 extern std::atomic<int> numStreamClientsConnected;
 
+struct LUSIStreamHeader {
+    uint64_t sizeFrame1;
+    uint64_t sizeFrame2;
+};
 struct LUSIVisionTelem {
 
     uint64_t timestamp;
@@ -53,6 +57,7 @@ struct LUSIVisionTelem {
 
 
 };
+
 
 class LUSIVIsionGenerator {
 public:
