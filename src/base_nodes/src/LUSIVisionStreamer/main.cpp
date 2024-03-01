@@ -239,7 +239,7 @@ int main(int argc, char** argv) {
 
     ROS_INFO("setup vid sub");
    sub = n.subscribe("/videoStream/image_raw", 1, proccess_frame);
-   if (stereo)
+   //if (stereo)
       sub2 = n.subscribe("/videoStream2/image_raw", 1, proccess_frame2);
 
 

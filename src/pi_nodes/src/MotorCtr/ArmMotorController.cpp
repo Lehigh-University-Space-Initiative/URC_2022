@@ -11,7 +11,12 @@ void ArmMotorManager::stopAllMotors()
 void ArmMotorManager::parseDriveCommands(const cross_pkg_messages::RoverComputerDriveCMDConstPtr &msg)
 {
     //end_effector.setPower(msg->CMD_R.x);
-    wrist_yaw.setVelocity(msg->CMD_R.x);
+    wrist_pitch.setVelocity(msg->CMD_L.z);
+
+    //elbow_pitch.setVelocity(msg->CMD_R.x)
+    wrist_roll.setVelocity(-msg->CMD_R.y);
+    wrist_yaw.setVelocity(msg->CMD_R.z);
+
 }
 
 ArmMotorManager::ArmMotorManager()
@@ -32,12 +37,15 @@ ArmMotorManager::ArmMotorManager()
 
 ArmMotorManager::~ArmMotorManager()
 {
-
+    wrist_yaw.setEnable(false);
 }
 
 void ArmMotorManager::tick()
 {
 
    wrist_yaw.tick(); 
+   wrist_roll.tick();
+   wrist_pitch.tick();
+   elbow_pitch.tick();
 
 }

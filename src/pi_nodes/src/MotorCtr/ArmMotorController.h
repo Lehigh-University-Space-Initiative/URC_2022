@@ -28,7 +28,14 @@ private:
     void parseDriveCommands(const cross_pkg_messages::RoverComputerDriveCMDConstPtr& msg);
 
     // dir , step, enable
+    StepperDriver elbow_pitch = StepperDriver(10,9,22,10.0,200);
+
     StepperDriver wrist_yaw = StepperDriver(11,4,22,1/100.0,200);
+    StepperDriver wrist_roll = StepperDriver(17,27,22,1/30.0,200);
+    StepperDriver wrist_pitch = StepperDriver(10,9,22,1/5.0,200);
+
+
+
     //PWMSparkMax end_effector = PWMSparkMax(13);
 
 public:

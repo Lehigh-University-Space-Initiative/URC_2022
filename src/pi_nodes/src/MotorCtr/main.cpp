@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
    //DriveTrainMotorManager driveTrain{};
    ArmMotorManager arm{};
 
+   //BE CAREFULL CHANGING --- will effect steppor motor speeds
    ros::Rate loop_rate(800);
 
    auto driveCommandsSub = n.subscribe("/roverDriveCommands", 10, callback); 
