@@ -49,6 +49,29 @@ void SystemControlPanel::drawBody()
         close_ui = true;
     }
 
+    int lusi_vision_mode;
+    ros::param::get("/lusi_vision_mode", lusi_vision_mode);
+
+    ImGui::PushStyleColor(ImGuiCol_Button,IM_COL32(10,90,230,255));
+
+    if (lusi_vision_mode) {
+    if (ImGui::Button("Enable 3D LUSI Vision")) {
+        ros::param::set("/lusi_vision_mode", 0);
+    }
+    }
+    else {
+    if (ImGui::Button("Disable 3D LUSI Vision")) {
+        ros::param::set("/lusi_vision_mode", 1);
+    }
+    }
+
+    ImGui::PopStyleColor();
+
+    if (ImGui::Button("Reboot")) {
+        system("~/URC_2022/URC_DeployTools/reboot.sh");
+    }
+
+
 }
 
 void SystemControlPanel::setup()

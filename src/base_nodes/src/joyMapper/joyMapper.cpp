@@ -39,7 +39,7 @@ void joy1Callback(const sensor_msgs::JoyConstPtr& msg) {
 void sendCMD() {
    if (!gotA0MSG || !gotA1MSG) return;
 
-   float sensitivity = 0.6;; //0.40f;
+   float sensitivity = 0.6; //0.40f;
    // float sensitivity_turn = 0.4; //0.40f;
 
 

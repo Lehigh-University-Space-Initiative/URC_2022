@@ -22,6 +22,7 @@ void loadPanels() {
    uiPanels.push_back(new TelemetryPanel("Telemetry"));
    uiPanels.push_back(new SystemControlPanel("System Control"));
    uiPanels.push_back(new VideoViewPanel("Video Stream"));
+
    //uiPanels.push_back(new SoftwareDebugPanel("Software Debug"));
 
    for(auto p : uiPanels) {

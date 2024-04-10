@@ -43,9 +43,9 @@ ArmMotorManager::~ArmMotorManager()
 
 void ArmMotorManager::tick()
 {
-    // wrist_yaw.tick();
-    // wrist_roll.tick();
-    // wrist_pitch.tick();
-    // elbow_pitch.tick();
+    wrist_yaw.tick();
+    wrist_roll.tick();
+    wrist_pitch.tick();
+    elbow_pitch.tick();
     shoulder_pitch.tick();
 }
