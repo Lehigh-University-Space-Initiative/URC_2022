@@ -6,7 +6,7 @@ class Panel {
 protected: 
     std::string name;
 
-    //the begin and and statments are alread handled so continue wihtout them
+    //the begin and and statments are alread handled so continue without them
     virtual void drawBody() = 0;
 public:
     Panel(std::string name);
