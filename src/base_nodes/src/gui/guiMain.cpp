@@ -22,13 +22,15 @@ void loadPanels() {
    uiPanels.push_back(new TelemetryPanel("Telemetry"));
    uiPanels.push_back(new SystemControlPanel("System Control"));
    uiPanels.push_back(new VideoViewPanel("Video Stream"));
-   uiPanels.push_back(new SoftwareDebugPanel("Software Debug"));
+
+   //uiPanels.push_back(new SoftwareDebugPanel("Software Debug"));
 
    for(auto p : uiPanels) {
       p->setup();
    }
 }
 
+bool close_ui = false;
 
 int main(int argc, char** argv) {
     
@@ -44,9 +46,11 @@ int main(int argc, char** argv) {
 
    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-   ros::Rate sleepRate(120);
+   ros::Rate sleepRate(60);
 
-   while (n.ok() && !glfwWindowShouldClose(window)) {
+   std::chrono::system_clock::time_point last_frame;
+
+   while (n.ok() && !glfwWindowShouldClose(window) && !close_ui) {
       glfwPollEvents();
 
 
@@ -67,6 +71,13 @@ int main(int argc, char** argv) {
          pan->renderToScreen();
 
       renderFrame(window, clear_color);
+
+      auto now = std::chrono::system_clock::now();
+      auto delta = now - last_frame;
+      auto delta_s = static_cast<double>(delta.count() * 1E-9);
+      //ROS_INFO("Frame Delta: %f", delta_s);
+
+      last_frame = now;
 
       sleepRate.sleep();
    }

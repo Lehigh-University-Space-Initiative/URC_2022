@@ -21,6 +21,9 @@ ros::Publisher manualArm_pub;
 bool gotA0MSG = false;
 bool gotA1MSG = false;
 
+
+int op_mode;
+
 sensor_msgs::Joy last0MSG;
 sensor_msgs::Joy last1MSG;
 
@@ -36,7 +39,10 @@ void joy1Callback(const sensor_msgs::JoyConstPtr& msg) {
 void sendCMD() {
    if (!gotA0MSG || !gotA1MSG) return;
 
-   float sensitivity = 0.3f;//0.40f;
+   float sensitivity = 0.6; //0.40f;
+   // float sensitivity_turn = 0.4; //0.40f;
+
+
    cross_pkg_messages::ManualDriveCMD cmd;
    #if TESTING_MODE
    //test in a sin wive for x and cos wave for y
@@ -49,6 +55,13 @@ void sendCMD() {
    cmd.value.y = mag * cos(ros::Time::now().toSec() * 2.0f * M_PI / period);
 
    #else
+
+   // float diff = abs(last0MSG.axes[1] - last1MSG.axes[1]);
+
+   // float turn_t_val = diff / ((last0MSG.axes[1] + last1MSG.axes[1]) / 2);
+
+   // float sensitivity = sensitivity_streight + ((sensitivity_turn - sensitivity_streight) * turn_t_val);
+
    cmd.value.x = last0MSG.axes[1] * sensitivity;
    //temp inverting before fixing motroctr
    cmd.value.y = last1MSG.axes[1] * -sensitivity;
@@ -56,21 +69,26 @@ void sendCMD() {
    cmd.value.z = 0; // this is ignored
 
    // send the command
-   manualDrive_pub.publish(cmd);
+   if (!op_mode) {
+      manualDrive_pub.publish(cmd);
+   }
    // ROS_INFO("sending msg");
 
-   cross_pkg_messages::RoverComputerDriveCMD armCMD;
-   //set the CMD_L x y z to the last0MSG axes 0 1 2
-   //update, x is pitch, y = roll, z = yaw
-   armCMD.CMD_L.x = last0MSG.axes[1];
-   armCMD.CMD_L.y = last0MSG.axes[0];
-   armCMD.CMD_L.z = last0MSG.axes[2];
-   //set the CMD_R x y z to the last1MSG axes 0 1 2
-   armCMD.CMD_R.x = last1MSG.axes[1];
-   armCMD.CMD_R.y = last1MSG.axes[0];
-   armCMD.CMD_R.z = last1MSG.axes[2];
+   if (op_mode)
+   {
+      cross_pkg_messages::RoverComputerDriveCMD armCMD;
+      // set the CMD_L x y z to the last0MSG axes 0 1 2
+      // update, x is pitch, y = roll, z = yaw
+      armCMD.CMD_L.x = last0MSG.axes[1];
+      armCMD.CMD_L.y = last0MSG.axes[0];
+      armCMD.CMD_L.z = last0MSG.axes[2];
+      // set the CMD_R x y z to the last1MSG axes 0 1 2
+      armCMD.CMD_R.x = last1MSG.axes[1];
+      armCMD.CMD_R.y = last1MSG.axes[0];
+      armCMD.CMD_R.z = last1MSG.axes[2];
 
-   manualArm_pub.publish(armCMD);
+      manualArm_pub.publish(armCMD);
+   }
 }
 
 int main(int argc, char** argv) {
@@ -80,7 +98,7 @@ int main(int argc, char** argv) {
    ros::NodeHandle n;
 
    //TOOO: set rate to correct amount
-   ros::Rate loop_rate(10); 
+   ros::Rate loop_rate(30); 
 
    ROS_INFO("Joy Mapper is running");
    
@@ -96,6 +114,9 @@ int main(int argc, char** argv) {
 
    while (ros::ok()) {
       //proccsing
+
+      ros::param::get("/op_mode", op_mode);
+
       sendCMD();
 
       //run loop

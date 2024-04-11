@@ -21,3 +21,5 @@
 #include "sensor_msgs/CompressedImage.h"
 #include "theora_image_transport/Packet.h"
 #include <cv_bridge/cv_bridge.h>
+
+extern bool close_ui;

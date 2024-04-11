@@ -27,6 +27,7 @@ int main(int argc, char** argv) {
    ros::NodeHandle n;
 
    std::array<int,4> camMap = {0,1,2,99};
+   int cam3D = 1;
 
    ROS_INFO("VideoStreamer is running");
    
@@ -41,15 +42,27 @@ int main(int argc, char** argv) {
 
    image_transport::ImageTransport it(n);
    image_transport::Publisher pub = it.advertise("/videoStream", 1);
+   //image_transport::Publisher pub2 = it.advertise("/videoStream2", 1);
 
    cv::VideoCapture cap;
+   cv::VideoCapture cap2;
    cv::Mat frame;
+   cv::Mat frame2;
    sensor_msgs::ImagePtr msg;
+   sensor_msgs::ImagePtr msg2;
 
    std::chrono::system_clock::time_point lastFrameSentTime;
 
+   bool lusi_vision_3d = true;
+
    while (n.ok()) {
+      
+      ros::param::get("/lusi_vision_mode",lusi_vision_3d);
       //proccsing
+      cap2 = cv::VideoCapture(cam3D, CV_CAP_V4L2);
+      if(!cap.isOpened()) {
+         ROS_WARN("Requested Cam 3D does not exist");
+      }
 
       //read in current streaming cam every 10 frames
       if (frameNum % 1 == 0) {
@@ -61,6 +74,9 @@ int main(int argc, char** argv) {
             loop_rate.sleep();
             continue;
          }
+
+
+
          ros::param::get("/streamCam",newSteamingCam);
          if (newSteamingCam != currentStreamingCam) {
             currentStreamingCam = newSteamingCam;
@@ -92,6 +108,12 @@ int main(int argc, char** argv) {
       // ROS_INFO("requesting frame");
       cap >> frame;
 
+      if (lusi_vision_3d) {
+         cap2 >> frame2;
+      } else {
+         frame2 = cv::Mat();
+      }
+
       //if aruco do that
       bool processAruco = false;
 
@@ -107,7 +129,29 @@ int main(int argc, char** argv) {
 
       // }
 
+      if(!frame2.empty()) {
+
+         // if (currentStreamingCam == 1) {
+         //    cv::flip(frame,frame, 0);
+         // }
+
+         msg2 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame2).toImageMsg();
+         auto now = std::chrono::system_clock::now();
+         auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameSentTime).count();
+         //lastFrameSentTime = now;
+         ROS_INFO(("sending frame 2 with delta: " + std::to_string(delta)).c_str());
+         pub2.publish(msg2);
+         //cv::waitKey(1);
+      } else {
+         ROS_INFO("no frame data 2");
+      }
+
       if(!frame.empty()) {
+
+         // if (currentStreamingCam == 1) {
+         //    cv::flip(frame,frame, 0);
+         // }
+
          msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
          auto now = std::chrono::system_clock::now();
          auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameSentTime).count();
@@ -118,6 +162,10 @@ int main(int argc, char** argv) {
       } else {
          ROS_INFO("no frame data");
       }
+
+      //ROS_INFO("asdasdasdklasdjaskldfjasklfasjf");
+
+      
 
       //run loop
       

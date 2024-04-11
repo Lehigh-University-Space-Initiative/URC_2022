@@ -45,14 +45,14 @@ void VideoViewPanel::setupSubscriber()
     //    ROS_INFO("got frame");
        currentImage = cv_bridge::toCvShare(msg, "bgr8")->image;
        auto now = std::chrono::system_clock::now();
-       ROS_INFO(("Frame Delta: " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameTime).count())).c_str());
+       //ROS_INFO(("Frame Delta: " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameTime).count())).c_str());
        lastFrameTime = now;
         showingLOS = false;
         setNewIMG(); 
     });
     ROS_INFO("setup vid sub");
     sub = n.subscribe("/videoStream/image_raw", 1, f);
-    // sub = n.subscribe("/videoStreamAR", 1, f);
+    //sub = n.subscribe("/videoStreamAR", 1, f);
 }
 
 void VideoViewPanel::setNewIMG()

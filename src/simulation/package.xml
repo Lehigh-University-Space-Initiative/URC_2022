@@ -59,6 +59,8 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <depend>xacro</depend>
+  <depend>gazebo_ros_diff_drive_multiwheel</depend>
+  <depend>cross_pkg_messages</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

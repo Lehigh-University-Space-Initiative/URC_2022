@@ -99,7 +99,7 @@ void SoftwareDebugPanel::update()
             auto lockHost = hosts.lock();
             for (auto& host : *lockHost) {
                 readDebugInfoFile(host);
-                ROS_INFO("Read debug info file for host %s (%s)", host.hostName.c_str(), host.hostIpAddress.c_str());
+                //ROS_INFO("Read debug info file for host %s (%s)", host.hostName.c_str(), host.hostIpAddress.c_str());
             }   
         });
         lastUpdateTime = currentTime;
@@ -112,15 +112,15 @@ void SoftwareDebugPanel::update()
 void SoftwareDebugPanel::readDebugInfoFile(Host& host)
 {
     std::string cmd = "sshpass -p " + host.password + " ssh -o ConnectTimeout=2 " + host.user + "@" + host.hostIpAddress + " cat " + host.debugFilePath;
-    ROS_INFO("Executing command: %s", cmd.c_str());
+    //ROS_INFO("Executing command: %s", cmd.c_str());
     std::string result = exec(cmd.c_str());
-    ROS_INFO("Result: %s", result.c_str());
+    //ROS_INFO("Result: %s", result.c_str());
 
     std::size_t found = result.find_first_of('Email');
     std::string line = result.substr(found+1);
     host.debugInfoLines = line;
-    ROS_INFO("Read the last line from debug info file for host %s (%s)", host.hostName.c_str(), host.hostIpAddress.c_str());
-    ROS_INFO("Last line: %s", line.c_str());
+    //ROS_INFO("Read the last line from debug info file for host %s (%s)", host.hostName.c_str(), host.hostIpAddress.c_str());
+    //ROS_INFO("Last line: %s", line.c_str());
 
     std::string dateTime, branch, userName;
     std::string gitCommitHash, gitCommitMessage; // don't need these

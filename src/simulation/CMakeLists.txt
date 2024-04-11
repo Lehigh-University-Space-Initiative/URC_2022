@@ -11,7 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  sensor_msgs
   xacro
+  gazebo_ros_diff_drive_multiwheel
+  cross_pkg_messages
 )
 
 ## System dependencies are found with CMake's conventions
@@ -205,6 +208,10 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(GazeboDriveLink_node src/GazeboDriveLink/main.cpp)
+target_link_libraries(GazeboDriveLink_node ${catkin_LIBRARIES})
+add_dependencies(GazeboDriveLink_node ${catkin_EXPORTED_TARGETS})
 
 # Xacro files
 file(GLOB xacro_files "descriptions/*.world.xacro")

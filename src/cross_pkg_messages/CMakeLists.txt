@@ -51,6 +51,7 @@ add_message_files(
   FILES
   ManualDriveCMD.msg
   RoverComputerDriveCMD.msg
+  GPSData.msg
 )
 
 ## Generate services in the 'srv' folder

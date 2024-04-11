@@ -20,7 +20,6 @@ rospy.loginfo("videoStreamer2 is running")
 publisher = rospy.Publisher("/videoStreamAR", Image, queue_size=1)
 
 def callback(data):
-    # rospy.loginfo("Got frame")
     frame = bridge.imgmsg_to_cv2(data);
     # (corners, ids, rejected) = cv2.aruco.detectMarkers(frame, arucoDict, parameters=arucoParams)
     corners, ids, rejected = detector.detectMarkers(frame)
@@ -59,6 +58,7 @@ def callback(data):
             cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
     msg = bridge.cv2_to_imgmsg(frame, encoding="bgr8")
+    rospy.loginfo("Got frame")
     publisher.publish(msg)
 
 sub = rospy.Subscriber("/videoStream", Image, callback)

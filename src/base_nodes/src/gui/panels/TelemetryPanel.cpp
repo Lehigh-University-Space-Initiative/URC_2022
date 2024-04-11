@@ -7,14 +7,53 @@ void TelemetryPanel::drawBody()
     ImGui::Separator();
 
     ImGui::Text("Left Motors");
-    ImGui::ProgressBar(lastDriveCMD.CMD_L.x); 
-    ImGui::ProgressBar(lastDriveCMD.CMD_L.y); 
-    ImGui::ProgressBar(lastDriveCMD.CMD_L.z); 
+    
+    auto l1_n = lastDriveCMD.CMD_L.x < 0;
+    auto l2_n = lastDriveCMD.CMD_L.y < 0;
+    auto l3_n = lastDriveCMD.CMD_L.z < 0;
+    auto r1_n = lastDriveCMD.CMD_R.x < 0;
+    auto r2_n = lastDriveCMD.CMD_R.y < 0;
+    auto r3_n = lastDriveCMD.CMD_R.z < 0;
+
+
+    if (l1_n)
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(255,0,0,255));
+    ImGui::ProgressBar(abs(lastDriveCMD.CMD_L.x)); 
+    if (l1_n)
+        ImGui::PopStyleColor();
+
+    if (l2_n)
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(255,0,0,255));
+    ImGui::ProgressBar(abs(lastDriveCMD.CMD_L.y)); 
+    if (l2_n)
+        ImGui::PopStyleColor();
+
+    if (l3_n)
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(255,0,0,255));
+    ImGui::ProgressBar(abs(lastDriveCMD.CMD_L.z)); 
+    if (l3_n)
+        ImGui::PopStyleColor();
 
     ImGui::Text("Right Motors");
-    ImGui::ProgressBar(lastDriveCMD.CMD_R.x); 
-    ImGui::ProgressBar(lastDriveCMD.CMD_R.y); 
-    ImGui::ProgressBar(lastDriveCMD.CMD_R.z); 
+
+    if (r1_n)
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(255,0,0,255));
+    ImGui::ProgressBar(abs(lastDriveCMD.CMD_R.x)); 
+    if (r1_n)
+        ImGui::PopStyleColor();
+
+    if (r2_n)
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(255,0,0,255));
+    ImGui::ProgressBar(abs(lastDriveCMD.CMD_R.y));
+    if (r2_n)
+        ImGui::PopStyleColor();
+
+    if (r3_n)
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(255,0,0,255));
+    ImGui::ProgressBar(abs(lastDriveCMD.CMD_R.z));
+    if (r3_n)
+        ImGui::PopStyleColor();
+
 
     ImGui::Separator();
 
@@ -30,6 +69,10 @@ void TelemetryPanel::drawBody()
     ImGui::SameLine();
     ImGui::ProgressBar(lastArmCMD.CMD_L.y *0.5 + 0.5);
 
+    ImGui::Text("Wrist Pitch");
+    ImGui::SameLine();
+    ImGui::ProgressBar(lastArmCMD.CMD_L.z *0.5 + 0.5);
+
     ImGui::Separator();
 
     ImGui::Text("Right Stick");
@@ -38,11 +81,11 @@ void TelemetryPanel::drawBody()
     ImGui::SameLine();
     ImGui::ProgressBar(lastArmCMD.CMD_R.x *0.5 + 0.5);
 
-    ImGui::Text("Elbow Rotate");
+    ImGui::Text("Wrist Rotate");
     ImGui::SameLine();
     ImGui::ProgressBar(lastArmCMD.CMD_R.y *0.5 + 0.5);
 
-    ImGui::Text("End Effector Rotate");
+    ImGui::Text("Wrist Rotate");
     ImGui::SameLine();
     ImGui::ProgressBar(lastArmCMD.CMD_R.z *0.5 + 0.5);
 }
@@ -50,7 +93,13 @@ void TelemetryPanel::drawBody()
 void TelemetryPanel::setup()
 {
     auto f = boost::function<void(const cross_pkg_messages::RoverComputerDriveCMDConstPtr&)>([this](auto p){
+
         this->lastDriveCMD = *p;
+
+        //invert right side
+        this->lastDriveCMD.CMD_R.x *= -1;
+        this->lastDriveCMD.CMD_R.y *= -1;
+        this->lastDriveCMD.CMD_R.z *= -1;
     });
     auto f2 = boost::function<void(const cross_pkg_messages::RoverComputerDriveCMDConstPtr&)>([this](auto p){
         this->lastArmCMD = *p;
