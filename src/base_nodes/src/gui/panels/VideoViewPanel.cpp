@@ -51,8 +51,8 @@ void VideoViewPanel::setupSubscriber()
         setNewIMG(); 
     });
     ROS_INFO("setup vid sub");
-    //sub = n.subscribe("/videoStream/image_raw", 1, f);
-    sub = n.subscribe("/videoStreamAR", 1, f);
+    sub = n.subscribe("/videoStream/image_raw", 1, f);
+    //sub = n.subscribe("/videoStreamAR", 1, f);
 }
 
 void VideoViewPanel::setNewIMG()
