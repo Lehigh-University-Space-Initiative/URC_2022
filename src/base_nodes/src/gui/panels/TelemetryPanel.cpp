@@ -81,7 +81,7 @@ void TelemetryPanel::drawBody()
     ImGui::SameLine();
     ImGui::ProgressBar(lastArmCMD.CMD_R.x *0.5 + 0.5);
 
-    ImGui::Text("Wrist Rotate");
+    ImGui::Text("Wrist Something");
     ImGui::SameLine();
     ImGui::ProgressBar(lastArmCMD.CMD_R.y *0.5 + 0.5);
 

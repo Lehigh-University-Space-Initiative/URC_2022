@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 
    ros::NodeHandle n;
 
-   std::array<int,4> camMap = {0,1,2,99};
+   std::array<int,4> camMap = {0,1,2,3};
    int cam3D = 1;
 
    ROS_INFO("VideoStreamer is running");
@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 
    image_transport::ImageTransport it(n);
    image_transport::Publisher pub = it.advertise("/videoStream", 1);
-   //image_transport::Publisher pub2 = it.advertise("/videoStream2", 1);
+   image_transport::Publisher pub2 = it.advertise("/videoStream2", 1);
 
    cv::VideoCapture cap;
    cv::VideoCapture cap2;
@@ -53,21 +53,18 @@ int main(int argc, char** argv) {
 
    std::chrono::system_clock::time_point lastFrameSentTime;
 
-   bool lusi_vision_3d = true;
+   int lusi_vision_3d = false;
+   int new_lusi_vision_3d = false;
+   bool firstRun = true;
 
    while (n.ok()) {
       
-      ros::param::get("/lusi_vision_mode",lusi_vision_3d);
-      //proccsing
-      cap2 = cv::VideoCapture(cam3D, CV_CAP_V4L2);
-      if(!cap.isOpened()) {
-         ROS_WARN("Requested Cam 3D does not exist");
-      }
+    
 
       //read in current streaming cam every 10 frames
       if (frameNum % 1 == 0) {
-         if (!ros::param::has("/streamCam")) {
-            // ROS_WARN("No camera selected to stream");
+         if (!ros::param::has("/streamCam") || !ros::param::has("/lusi_vision_mode")) {
+            ROS_WARN("No camera selected to stream");
             // goto finishLoop;
             frameNum++;
             ros::spinOnce();
@@ -75,7 +72,26 @@ int main(int argc, char** argv) {
             continue;
          }
 
-
+         ros::param::get("/lusi_vision_mode", new_lusi_vision_3d);
+         if (new_lusi_vision_3d != lusi_vision_3d || firstRun)
+         {
+            //ROS_INFO("New 3D Cam Mode: %d, Got: %d, has: %d", new_lusi_vision_3d, got, ros::param::has("/lusi_vision_mode"));
+            firstRun = false;
+            lusi_vision_3d = new_lusi_vision_3d;
+            if (lusi_vision_3d)
+            {
+               cap2 = cv::VideoCapture(cam3D, CV_CAP_V4L2);
+               if (!cap.isOpened())
+               {
+                  ROS_WARN("Requested Cam 3D does not exist");
+               } else {
+                  ROS_INFO("Got 3D Cam");
+               }
+            } else {
+               cap2 = cv::VideoCapture();
+               ROS_INFO("Cleared 3D Cam");
+            }
+         }
 
          ros::param::get("/streamCam",newSteamingCam);
          if (newSteamingCam != currentStreamingCam) {
@@ -129,22 +145,22 @@ int main(int argc, char** argv) {
 
       // }
 
-      if(!frame2.empty()) {
+      // if(!frame2.empty()) {
 
-         // if (currentStreamingCam == 1) {
-         //    cv::flip(frame,frame, 0);
-         // }
+      //    // if (currentStreamingCam == 1) {
+      //    //    cv::flip(frame,frame, 0);
+      //    // }
 
-         msg2 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame2).toImageMsg();
-         auto now = std::chrono::system_clock::now();
-         auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameSentTime).count();
-         //lastFrameSentTime = now;
-         ROS_INFO(("sending frame 2 with delta: " + std::to_string(delta)).c_str());
-         pub2.publish(msg2);
-         //cv::waitKey(1);
-      } else {
-         ROS_INFO("no frame data 2");
-      }
+      //    msg2 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame2).toImageMsg();
+      //    // auto now = std::chrono::system_clock::now();
+      //    // auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastFrameSentTime).count();
+      //    // //lastFrameSentTime = now;
+      //    // ROS_INFO(("sending frame 2 with delta: " + std::to_string(delta)).c_str());
+      //    pub2.publish(msg2);
+      //    //cv::waitKey(1);
+      // } else if (lusi_vision_3d) {
+      //    ROS_INFO("no frame data 2");
+      // }
 
       if(!frame.empty()) {
 

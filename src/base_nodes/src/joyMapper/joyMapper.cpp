@@ -39,14 +39,14 @@ void joy1Callback(const sensor_msgs::JoyConstPtr& msg) {
 void sendCMD() {
    if (!gotA0MSG || !gotA1MSG) return;
 
-   float sensitivity = 0.6; //0.40f;
+   float sensitivity = 0.4; //0.40f;
    // float sensitivity_turn = 0.4; //0.40f;
 
 
    cross_pkg_messages::ManualDriveCMD cmd;
    #if TESTING_MODE
    //test in a sin wive for x and cos wave for y
-   float mag = 0.4f;
+   float mag = 0.2f;
    float period = 10.0f;
 
    // cmd.value.x = 0.4f;
@@ -86,6 +86,22 @@ void sendCMD() {
       armCMD.CMD_R.x = last1MSG.axes[1];
       armCMD.CMD_R.y = last1MSG.axes[0];
       armCMD.CMD_R.z = last1MSG.axes[2];
+
+      const float deadBand = 0.2f;
+
+      if (abs(armCMD.CMD_L.x) < deadBand)
+         armCMD.CMD_L.x = 0;
+      if (abs(armCMD.CMD_L.y) < deadBand)
+         armCMD.CMD_L.y = 0;
+      if (abs(armCMD.CMD_L.z) < deadBand)
+         armCMD.CMD_L.z= 0;
+
+      if (abs(armCMD.CMD_R.x) < deadBand)
+         armCMD.CMD_R.x = 0;
+      if (abs(armCMD.CMD_R.y) < deadBand)
+         armCMD.CMD_R.y = 0;
+      if (abs(armCMD.CMD_R.z) < deadBand)
+         armCMD.CMD_R.z = 0;
 
       manualArm_pub.publish(armCMD);
    }
