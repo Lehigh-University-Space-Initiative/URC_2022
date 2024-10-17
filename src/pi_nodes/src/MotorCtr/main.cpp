@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
    ROS_INFO("Motor CTR startup");
 
    DriveTrainMotorManager driveTrain{};
-   //ArmMotorManager arm{};
+   // ArmMotorManager arm{};
 
    //BE CAREFULL CHANGING --- will effect steppor motor speeds
    ros::Rate loop_rate(800);
@@ -59,9 +59,9 @@ int main(int argc, char** argv) {
    while (ros::ok()) {
       ros::spinOnce();
 
-      //arm.tick();
+      // arm.tick();
 
-      //wrist_yaw.tick();
+      // wrist_yaw.tick();
 
       loop_rate.sleep();
    }
